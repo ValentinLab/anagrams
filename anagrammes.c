@@ -6,14 +6,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Part 1
+/* 
+ * ----------------------------------------
+ * -> Part 1 : Strings
+ * ----------------------------------------
+ */
 
 bool string_are_anagrams(const char *str1, const char *str2) {
+  // Comparer le nombre de lettres des deux mots
+  if(strlen(str1) != strlen(str2)) {
+    return false;
+  }
+
+  // Comparer les lettres présentes dans les deux chaînes
+  
+
   return false;
 }
 
 char *string_duplicate(const char *str) {
-  return NULL;
+  // Allouer la mémoire nécessaire à la nouvelle chaîne
+  char *str_cpy = malloc(strlen(str) * sizeof(char) + 1);
+
+  // Copier la chaîne dans la nouvelle
+  strcpy(str_cpy, str);
+
+  return str_cpy;
 }
 
 void string_sort_letters(char *str) {
@@ -22,7 +40,11 @@ void string_sort_letters(char *str) {
 void clean_newline(char *buf, size_t size) {
 }
 
-// Part 2
+/* 
+ * ----------------------------------------
+ * -> Part 2 : Arrays
+ * ----------------------------------------
+ */
 
 void word_array_create(struct word_array *self) {
 }
@@ -61,7 +83,11 @@ void word_array_read_file(struct word_array *self, const char *filename) {
   fclose(fp);
 }
 
-// Part 3
+/* 
+ * ----------------------------------------
+ * -> Part 3 : Dictionnary
+ * ----------------------------------------
+ */
 
 void word_dict_bucket_destroy(struct word_dict_bucket *bucket) {
 }
@@ -93,7 +119,11 @@ void word_dict_fill_with_array(struct word_dict *self, const struct word_array *
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result) {
 }
 
-// Part 4
+/* 
+ * ----------------------------------------
+ * -> Part 4 : Jokers
+ * ----------------------------------------
+ */
 
 void wildcard_create(struct wildcard *self) {
 }
