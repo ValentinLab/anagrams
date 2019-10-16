@@ -18,7 +18,7 @@ bool string_are_anagrams(const char *str1, const char *str2) {
     return false;
   }
 
-  // Comparer les lettres présentes dans les deux chaînes
+  // Trier les deux chaînes puis les comparer
   
 
   return false;
@@ -35,6 +35,24 @@ char *string_duplicate(const char *str) {
 }
 
 void string_sort_letters(char *str) {
+  // Taille de la châine à trier
+  size_t size = strlen(str);
+
+  // Parcourir l'ensemble de la chaîne de caractères
+  for(size_t i = 1; i < size; ++i) {
+    // Lettre courante
+    int value = str[i];
+
+    // Trouver le bon indice 
+    size_t j = i;
+    while(j > 0 && (int)str[j - 1] > value) {
+      str[j] = str[j - 1];
+      --j;
+    }
+
+    // Insérer la lettre courante au bon incdice
+    str[j] = (char)value;
+  }
 }
 
 void clean_newline(char *buf, size_t size) {

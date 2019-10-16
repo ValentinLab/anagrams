@@ -13,7 +13,14 @@ int main(int argc, char *argv[]) {
     fgets(buf, BUFSIZE, stdin);
     clean_newline(buf, BUFSIZE);
 
-    // TEST
+    /*
+     * ******************************
+     * TEST
+     * *****************************
+     */
+    string_sort_letters(buf);
+
+    printf("%s\n", buf);
   }
 
   return 0;
