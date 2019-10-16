@@ -13,15 +13,32 @@
  */
 
 bool string_are_anagrams(const char *str1, const char *str2) {
+  // Taille des chaînes de caractères
+  size_t size_str1 = strlen(str1);
+  size_t size_str2 = strlen(str2);
+
   // Comparer le nombre de lettres des deux mots
-  if(strlen(str1) != strlen(str2)) {
+  if(size_str1 != size_str2) {
     return false;
   }
 
-  // Trier les deux chaînes puis les comparer
-  
+  // Compter le nombre de lettres de la première chaîne
+  int *count_letters = calloc(26, sizeof(int));
+  for(size_t i = 0; i < size_str1; ++i) {
+    count_letters[str1[i] - 'a'] += 1;
+  }
 
-  return false;
+  // Comparer avec la deuxième chaîne
+  for(size_t i = 0; i < size_str1; ++i) {
+    count_letters[str2[i] - 'a'] -= 1;
+    if(count_letters[str2[i] - 'a'] < 0) {
+      return false;
+    }
+  }
+
+  free(count_letters);
+
+  return true;
 }
 
 char *string_duplicate(const char *str) {
@@ -45,13 +62,13 @@ void string_sort_letters(char *str) {
 
     // Trouver le bon indice 
     size_t j = i;
-    while(j > 0 && (int)str[j - 1] > value) {
+    while(j > 0 && str[j - 1] > value) {
       str[j] = str[j - 1];
       --j;
     }
 
     // Insérer la lettre courante au bon incdice
-    str[j] = (char)value;
+    str[j] = value;
   }
 }
 

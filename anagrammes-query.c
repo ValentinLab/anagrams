@@ -18,9 +18,7 @@ int main(int argc, char *argv[]) {
      * TEST
      * *****************************
      */
-    string_sort_letters(buf);
-
-    printf("%s\n", buf);
+    printf("%d\n", string_are_anagrams(buf, "abc\n"));
   }
 
   return 0;
