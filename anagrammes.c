@@ -120,13 +120,13 @@ void word_array_destroy(struct word_array *self) {
 /*
  * Augmenter la capacité du tableau de mots
  */
-static word_array_grow(struct word_array *self) {
+static void word_array_grow(struct word_array *self) {
   // Doubler la capacité du tableau
   self->capacity *= 2;
 
   // Allouer la mémoire du nouveau tableau et le remplir
   char **data = calloc(self->capacity, sizeof(char *));
-  memcpy(data, self->data);
+  memcpy(data, self->data, self->size * sizeof(char *));
   
   // Remplacer l'ancien tableau
   free(self->data);
