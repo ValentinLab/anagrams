@@ -14,23 +14,27 @@
 
 bool string_are_anagrams(const char *str1, const char *str2) {
   // Taille des chaînes de caractères
-  size_t size_str1 = strlen(str1);
-  size_t size_str2 = strlen(str2);
+  size_t size_str = strlen(str1);
 
-  // Comparer le nombre de lettres des deux mots
-  if(size_str1 != size_str2) {
+  // Comparer la taille des deux chaînes
+  if(size_str != strlen(str2)) {
     return false;
   }
 
-  // Compter le nombre de lettres de la première chaîne
+  // Compter les occurences de chaque lettre pout str1
   int *count_letters = calloc(26, sizeof(int));
-  for(size_t i = 0; i < size_str1; ++i) {
+  if(count_letters == NULL) {
+    printf("Problème lors de l'allocation de la mémoire.\n");
+    return false;
+  }
+  for(size_t i = 0; i < size_str; ++i) {
     count_letters[str1[i] - 'a'] += 1;
   }
 
-  // Comparer avec la deuxième chaîne
-  for(size_t i = 0; i < size_str1; ++i) {
+  // Comparer avec les occurences de chaque lettre dans str2
+  for(size_t i = 0; i < size_str; ++i) {
     count_letters[str2[i] - 'a'] -= 1;
+    // Vérifier si la lettre apparaît plus souvent dans str2 que str1
     if(count_letters[str2[i] - 'a'] < 0) {
       return false;
     }
@@ -44,15 +48,19 @@ bool string_are_anagrams(const char *str1, const char *str2) {
 char *string_duplicate(const char *str) {
   // Allouer la mémoire nécessaire à la nouvelle chaîne
   char *str_cpy = malloc(strlen(str) * sizeof(char) + 1);
+  if(str_cpy == NULL) {
+    printf("Problème lors de l'allocation de la mémoire.\n");
+    return NULL;
+  }
 
-  // Copier la chaîne dans la nouvelle
+  // Copier str dans la nouvelle chaîne
   strcpy(str_cpy, str);
 
   return str_cpy;
 }
 
 void string_sort_letters(char *str) {
-  // Taille de la châine à trier
+  // Taille de la chaîne à trier
   size_t size = strlen(str);
 
   // Parcourir l'ensemble de la chaîne de caractères
@@ -60,14 +68,14 @@ void string_sort_letters(char *str) {
     // Lettre courante
     int value = str[i];
 
-    // Trouver le bon indice 
+    // Trouver le bon indice du caractère
     size_t j = i;
     while(j > 0 && str[j - 1] > value) {
       str[j] = str[j - 1];
       --j;
     }
 
-    // Insérer la lettre courante au bon incdice
+    // Insérer la lettre courante au bon indice
     str[j] = value;
   }
 }
