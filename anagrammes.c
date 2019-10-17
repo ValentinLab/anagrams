@@ -93,14 +93,28 @@ void clean_newline(char *buf, size_t size) {
 
 /* 
  * ----------------------------------------
- * -> Partie 2 : Arrays
+ * -> Partie 2 : Word array
  * ----------------------------------------
  */
 
 void word_array_create(struct word_array *self) {
+  // Allouer un tableau de capacité 4 et taille 0
+  self->data = calloc(4, sizeof(char *));
+  self->size = 0;
+  self->capacity = 4;
 }
 
 void word_array_destroy(struct word_array *self) {
+  // Libérer la mémoire de tous les mots présents dans la tableau
+  for(size_t i = 0; i < self->size; ++i) {
+    free(self->data[i]);
+  }
+
+  // Libérer la mémoire du tableau
+  free(self->data);
+  self->data = NULL;
+  self->capacity = 0;
+  self->size = 0;
 }
 
 void word_array_add(struct word_array *self, const char *word) {

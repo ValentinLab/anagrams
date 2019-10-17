@@ -18,7 +18,9 @@ int main(int argc, char *argv[]) {
      * TEST
      * *****************************
      */
-    printf("%d\n", string_are_anagrams(buf, "abc"));
+    struct word_array b;
+    word_array_create(&b);
+    word_array_destroy(&b);
   }
 
   return 0;
