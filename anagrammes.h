@@ -56,6 +56,9 @@ void word_array_create(struct word_array *self);
  */
 void word_array_destroy(struct word_array *self);
 
+/*
+ * Ajouter un nouveau mot au tableau
+ */
 void word_array_add(struct word_array *self, const char *word);
 
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result);

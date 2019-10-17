@@ -117,7 +117,31 @@ void word_array_destroy(struct word_array *self) {
   self->size = 0;
 }
 
+/*
+ * Augmenter la capacité du tableau de mots
+ */
+static word_array_grow(struct word_array *self) {
+  // Doubler la capacité du tableau
+  self->capacity *= 2;
+
+  // Allouer la mémoire du nouveau tableau et le remplir
+  char **data = calloc(self->capacity, sizeof(char *));
+  memcpy(data, self->data);
+  
+  // Remplacer l'ancien tableau
+  free(self->data);
+  self->data = data;
+}
+
 void word_array_add(struct word_array *self, const char *word) {
+  // Vérifier la capacité du tableau
+  if(self->capacity == self->size) {
+    word_array_grow(self);
+  }
+
+  // Ajouter le nouveau mot au tableau
+  self->data[self->size] = string_duplicate(word);
+  self->size += 1;
 }
 
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result) {
