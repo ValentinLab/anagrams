@@ -30,7 +30,7 @@ char *string_duplicate(const char *str);
 void string_sort_letters(char *str);
 
 /*
- * Retirer le caractère de fin de ligne du buffer
+ * Retirer le caractère de fin de ligne d'un buffer
  */
 void clean_newline(char *buf, size_t size);
 
@@ -47,26 +47,29 @@ struct word_array {
 };
 
 /*
- * Initialiser la structure de tableau de mots
+ * Initialiser une structure de tableau de mots
  */
 void word_array_create(struct word_array *self);
 
 /*
- * Détruire la structure de tableau de mots
+ * Détruire une structure de tableau de mots
  */
 void word_array_destroy(struct word_array *self);
 
 /*
- * Ajouter un nouveau mot au tableau
+ * Ajouter un nouveau mot dans un tableau
  */
 void word_array_add(struct word_array *self, const char *word);
 
+/*
+ * Rechercher les anagrammes d'un mot dans un tableau
+ */
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result);
 
 void word_array_sort(struct word_array *self);
 
 /*
- * Afficher tous les mots du tableau (un par ligne)
+ * Afficher tous les mots d'un tableau (un par ligne)
  */
 void word_array_print(const struct word_array *self);
 

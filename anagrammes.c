@@ -145,7 +145,13 @@ void word_array_add(struct word_array *self, const char *word) {
 }
 
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result) {
-  
+  // Comparer word avec tous les éléments du tableau
+  for(size_t i = 0; i < self->size; ++i) {
+    if(string_are_anagrams(self->data[i], word)) {
+      // Ajouter l'anagramme au tableau resultat
+      word_array_add(result, self->data[i]);
+    }
+  }
 }
 
 void word_array_sort(struct word_array *self) {
