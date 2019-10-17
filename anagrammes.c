@@ -83,7 +83,7 @@ void string_sort_letters(char *str) {
 void clean_newline(char *buf, size_t size) {
   // Rechercher l'indice du caractère de fin de ligne
   size_t i = 0;
-  while(buf[i] != '\n') {
+  while(i < size - 1 && buf[i] != '\n') {
     ++i;
   }
 
@@ -145,12 +145,17 @@ void word_array_add(struct word_array *self, const char *word) {
 }
 
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result) {
+  
 }
 
 void word_array_sort(struct word_array *self) {
 }
 
 void word_array_print(const struct word_array *self) {
+  // Parcourir l'ensemble des éléments du tableau
+  for(size_t i = 0; i < self->size; ++i) {
+    printf("%s\n", self->data[i]);
+  }
 }
 
 void word_array_read_file(struct word_array *self, const char *filename) {

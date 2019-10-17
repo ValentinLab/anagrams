@@ -20,6 +20,13 @@ int main(int argc, char *argv[]) {
      */
     struct word_array b;
     word_array_create(&b);
+
+    word_array_add(&b, "bonjour");
+    word_array_add(&b, "salut");
+    word_array_add(&b, "coucou");
+
+    word_array_print(&b);
+
     word_array_destroy(&b);
   }
 

@@ -65,6 +65,9 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
 
 void word_array_sort(struct word_array *self);
 
+/*
+ * Afficher tous les mots du tableau (un par ligne)
+ */
 void word_array_print(const struct word_array *self);
 
 #define WORD_LETTERS_MAX 32
