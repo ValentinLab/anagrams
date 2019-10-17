@@ -81,6 +81,14 @@ void string_sort_letters(char *str) {
 }
 
 void clean_newline(char *buf, size_t size) {
+  // Rechercher l'indice du caractère de fin de ligne
+  size_t i = 0;
+  while(buf[i] != '\n') {
+    ++i;
+  }
+
+  // Remplacer le caractère par celui de fin de chaîne
+  buf[i] = '\0';
 }
 
 /* 

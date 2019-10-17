@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
      * TEST
      * *****************************
      */
-    printf("%d\n", string_are_anagrams(buf, "abc\n"));
+    printf("%d\n", string_are_anagrams(buf, "abc"));
   }
 
   return 0;
