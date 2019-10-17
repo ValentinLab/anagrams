@@ -8,7 +8,7 @@
 
 /* 
  * ----------------------------------------
- * -> Part 1 : Strings
+ * -> Partie 1 : Strings
  * ----------------------------------------
  */
 
@@ -93,7 +93,7 @@ void clean_newline(char *buf, size_t size) {
 
 /* 
  * ----------------------------------------
- * -> Part 2 : Arrays
+ * -> Partie 2 : Arrays
  * ----------------------------------------
  */
 
@@ -136,7 +136,7 @@ void word_array_read_file(struct word_array *self, const char *filename) {
 
 /* 
  * ----------------------------------------
- * -> Part 3 : Dictionnary
+ * -> Partie 3 : Dictionnary
  * ----------------------------------------
  */
 
@@ -172,7 +172,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
 
 /* 
  * ----------------------------------------
- * -> Part 4 : Wildcards
+ * -> Partie 4 : Wildcards
  * ----------------------------------------
  */
 

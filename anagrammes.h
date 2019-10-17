@@ -10,18 +10,33 @@ extern "C" {
 
 /* 
  * ----------------------------------------
- * -> Part 1 : Strings
+ * -> Partie 1 : Strings
  * ----------------------------------------
  */
 
+/*
+ * Comparer deux strings pour savoir si ce sont des anagrammes
+ */
 bool string_are_anagrams(const char *str1, const char *str2);
+
+/*
+ * Dupliquer une string
+ */
 char *string_duplicate(const char *str);
+
+/*
+ * Trier les letres d'une string (tri par insertion)
+ */
 void string_sort_letters(char *str);
+
+/*
+ * Retirer le caractère de fin de ligne du buffer
+ */
 void clean_newline(char *buf, size_t size);
 
 /* 
  * ----------------------------------------
- * -> Part 2 : Arrays
+ * -> Partie 2 : Arrays
  * ----------------------------------------
  */
 
@@ -44,7 +59,7 @@ void word_array_read_file(struct word_array *self, const char *filename);
 
 /* 
  * ----------------------------------------
- * -> Part 3 : Dictionnary
+ * -> Partie 3 : Dictionnary
  * ----------------------------------------
  */
 
@@ -74,7 +89,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
 
 /* 
  * ----------------------------------------
- * -> Part 4 : Wildcards
+ * -> Partie 4 : Wildcards
  * ----------------------------------------
  */
 
