@@ -172,7 +172,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
 
 /* 
  * ----------------------------------------
- * -> Part 4 : Jokers
+ * -> Part 4 : Wildcards
  * ----------------------------------------
  */
 

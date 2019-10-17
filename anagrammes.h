@@ -8,14 +8,22 @@
 extern "C" {
 #endif
 
-// Part 1
+/* 
+ * ----------------------------------------
+ * -> Part 1 : Strings
+ * ----------------------------------------
+ */
 
 bool string_are_anagrams(const char *str1, const char *str2);
 char *string_duplicate(const char *str);
 void string_sort_letters(char *str);
 void clean_newline(char *buf, size_t size);
 
-// Part 2
+/* 
+ * ----------------------------------------
+ * -> Part 2 : Arrays
+ * ----------------------------------------
+ */
 
 struct word_array {
   char **data;
@@ -34,7 +42,11 @@ void word_array_print(const struct word_array *self);
 
 void word_array_read_file(struct word_array *self, const char *filename);
 
-// Part 3
+/* 
+ * ----------------------------------------
+ * -> Part 3 : Dictionnary
+ * ----------------------------------------
+ */
 
 struct word_dict_bucket {
   const char *word;
@@ -60,7 +72,11 @@ void word_dict_add(struct word_dict *self, const char *word);
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array);
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result);
 
-// Part 4
+/* 
+ * ----------------------------------------
+ * -> Part 4 : Wildcards
+ * ----------------------------------------
+ */
 
 #define WILDCARDS_MAX 3
 
