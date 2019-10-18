@@ -79,7 +79,7 @@ void word_array_print(const struct word_array *self);
 #define WORD_LETTERS_MAX 32
 
 /*
- * Lire le contenu d'un fichier
+ * Lire le contenu d'un fichier texte
  */
 void word_array_read_file(struct word_array *self, const char *filename);
 
@@ -94,8 +94,14 @@ struct word_dict_bucket {
   struct word_dict_bucket *next;
 };
 
+/*
+ * Détruire une liste chaînée
+ */
 void word_dict_bucket_destroy(struct word_dict_bucket *bucket);
 
+/*
+ * Ajouter un élément dans une liste chaînée
+ */
 struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word);
 
 struct word_dict {

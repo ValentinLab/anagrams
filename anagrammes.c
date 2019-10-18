@@ -201,6 +201,7 @@ static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdif
 }
 
 void word_array_sort(struct word_array *self) {
+  // Utiliser le QuickSort
   word_array_quick_sort(self, 0, self->size - 1);
 }
 
@@ -237,12 +238,33 @@ void word_array_read_file(struct word_array *self, const char *filename) {
  */
 
 void word_dict_bucket_destroy(struct word_dict_bucket *bucket) {
+  if(bucket != NULL) {
+    // Détruire le noeud suivant
+    word_dict_bucket_destroy(bucket->next);
+    // Détruire le noeud courant
+    free(bucket);
+  }
+}
+
+static void word_dict_bucker_add_after(struct word_dict_bucket *bucket, const char *word) {
+  
 }
 
 struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word) {
-  return NULL;
-}
+  // Ajouter un nouveau noeud à la liste (non vide)
+  if(bucket->next == NULL) {
+    struct word_dict_bucket *new_node = malloc(sizeof(struct word_dict_bucket));
+    new_node->word = word;
+    new_node->next = NULL;
 
+    bucket->next = new_node;
+    return;
+  }
+
+  // Parcourir la liste
+  word_dict_bucket_add(bucket->next, word);
+  return bucket;
+}
 
 void word_dict_create(struct word_dict *self) {
 }
