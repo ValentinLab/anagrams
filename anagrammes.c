@@ -154,7 +154,54 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
   }
 }
 
+/*
+ * Échanger deux valeurs aux indidces i et j dans un tableau
+ */
+static void word_array_swap(struct word_array *self, size_t i, size_t j) {
+  char *tmp = self->data[i];
+  self->data[i] = self->data[j];
+  self->data[j] = tmp;
+}
+
+/*
+ * Trouver le pivot d'un tableau de mots et placer les éléments correctement
+ */
+static size_t word_array_quick_sort_partition(struct word_array *self, size_t low, size_t high) {
+  // Trouver le pivot
+  size_t pivot_index = (low + high)/2;
+  const char *pivot_value = self->data[pivot_index];
+
+  // Placer les éléments correctement selont le pivot
+  word_array_swap(self, pivot_index, high);
+  size_t current = low;
+  for(size_t i = low; i < high; ++i) {
+    if(strcmp(pivot_value, self->data[i]) < 0) {
+      word_array_swap(self, i, current);
+      ++current;
+    }
+  }
+
+  // Placer le pivot au bon endroit
+  word_array_swap(self, high, current);
+
+  return current;
+}
+
+/*
+ * Trier un tableau de mots avec QuickSort
+ */
+static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdiff_t high) {
+  if(low < high) {
+    // Trouver le pivot
+    size_t pivot = word_array_quick_sort_partition(self, low, high);
+    // Trier récursivement avant et après le pivot
+    word_array_quick_sort(self, low, pivot - 1);
+    word_array_quick_sort(self, pivot + 1, high);
+  }
+}
+
 void word_array_sort(struct word_array *self) {
+  word_array_quick_sort(self, 0, self->size - 1);
 }
 
 void word_array_print(const struct word_array *self) {

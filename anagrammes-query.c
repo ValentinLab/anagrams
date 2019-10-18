@@ -27,6 +27,11 @@ int main(int argc, char *argv[]) {
 
     word_array_print(&b);
 
+    word_array_sort(&b);
+    printf("-----\n");
+
+    word_array_print(&b);
+
     word_array_destroy(&b);
   }
 

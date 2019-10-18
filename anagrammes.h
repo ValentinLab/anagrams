@@ -66,6 +66,9 @@ void word_array_add(struct word_array *self, const char *word);
  */
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result);
 
+/*
+ * Trier les mpts d'un tableau (tri rapide)
+ */
 void word_array_sort(struct word_array *self);
 
 /*
@@ -75,6 +78,9 @@ void word_array_print(const struct word_array *self);
 
 #define WORD_LETTERS_MAX 32
 
+/*
+ * Lire le contenu d'un fichier
+ */
 void word_array_read_file(struct word_array *self, const char *filename);
 
 /* 
