@@ -245,20 +245,33 @@ void word_dict_bucket_destroy(struct word_dict_bucket *bucket) {
     free(bucket);
   }
 }
+/*
+ * Créer un nouveau noeud pour une liste de motq
+ */
+static struct word_dict_bucket *word_dict_bucket_new_node(const char *word) {
+  // Allocation de la mémoire du nouveau noeud
+  struct word_dict_bucket *new_node = malloc(sizeof(struct word_dict_bucket));
+  new_node->word = word;
+  new_node->next = NULL;
 
-static void word_dict_bucker_add_after(struct word_dict_bucket *bucket, const char *word) {
-  
+  return new_node;
 }
 
 struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word) {
+  // Vérifier si la liste est vide
+  if(bucket == NULL) {
+    struct word_dict_bucket *new_node = word_dict_bucket_new_node(word);
+    bucket = new_node;
+
+    return bucket;
+  }
+  
   // Ajouter un nouveau noeud à la liste (non vide)
   if(bucket->next == NULL) {
-    struct word_dict_bucket *new_node = malloc(sizeof(struct word_dict_bucket));
-    new_node->word = word;
-    new_node->next = NULL;
-
+    struct word_dict_bucket *new_node = word_dict_bucket_new_node(word);
     bucket->next = new_node;
-    return;
+
+    return bucket;
   }
 
   // Parcourir la liste
