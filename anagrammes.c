@@ -14,6 +14,7 @@
 
 bool string_are_anagrams(const char *str1, const char *str2) {
   // Taille des chaînes de caractères
+  const size_t alphabet_size = 26;
   size_t size_str = strlen(str1);
 
   // Comparer la taille des deux chaînes
@@ -21,23 +22,24 @@ bool string_are_anagrams(const char *str1, const char *str2) {
     return false;
   }
 
-  // Compter les occurences de chaque lettre pout str1
-  int *count_letters = calloc(26, sizeof(int));
+  // Compter les occurences de chaque lettre pout str1 et str2
+  int *count_letters = calloc(alphabet_size, sizeof(int));
   if(count_letters == NULL) {
     printf("Problème lors de l'allocation de la mémoire.\n");
     return false;
   }
   for(size_t i = 0; i < size_str; ++i) {
     count_letters[str1[i] - 'a'] += 1;
+    count_letters[str2[i] - 'a'] -= 1;
   }
 
-  // Comparer avec les occurences de chaque lettre dans str2
-  for(size_t i = 0; i < size_str; ++i) {
-    count_letters[str2[i] - 'a'] -= 1;
-    // Vérifier si la lettre apparaît plus souvent dans str2 que str1
-    if(count_letters[str2[i] - 'a'] < 0) {
+  // Vérifier les occurences des deux strings
+  size_t index = 0;
+  while(index < alphabet_size) {
+    if(count_letters[index] != 0) {
       return false;
     }
+    ++index;
   }
 
   free(count_letters);
@@ -97,11 +99,12 @@ void clean_newline(char *buf, size_t size) {
  * ----------------------------------------
  */
 
+
 void word_array_create(struct word_array *self) {
-  // Allouer un tableau de capacité 4 et taille 0
-  self->data = calloc(4, sizeof(char *));
+  // Allouer un tableau de capacité 10 et taille 0
+  self->data = calloc(10, sizeof(char *));
   self->size = 0;
-  self->capacity = 4;
+  self->capacity = 10;
 }
 
 void word_array_destroy(struct word_array *self) {
@@ -245,37 +248,24 @@ void word_dict_bucket_destroy(struct word_dict_bucket *bucket) {
     free(bucket);
   }
 }
-/*
- * Créer un nouveau noeud pour une liste de motq
- */
-static struct word_dict_bucket *word_dict_bucket_new_node(const char *word) {
+
+struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word) {
   // Allocation de la mémoire du nouveau noeud
   struct word_dict_bucket *new_node = malloc(sizeof(struct word_dict_bucket));
   new_node->word = word;
-  new_node->next = NULL;
 
-  return new_node;
-}
-
-struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word) {
   // Vérifier si la liste est vide
   if(bucket == NULL) {
-    struct word_dict_bucket *new_node = word_dict_bucket_new_node(word);
+    new_node->next = NULL;
     bucket = new_node;
 
     return bucket;
   }
-  
-  // Ajouter un nouveau noeud à la liste (non vide)
-  if(bucket->next == NULL) {
-    struct word_dict_bucket *new_node = word_dict_bucket_new_node(word);
-    bucket->next = new_node;
 
-    return bucket;
-  }
+  // Ajout du noeud
+  new_node->next = bucket->next;
+  bucket->next = new_node;
 
-  // Parcourir la liste
-  word_dict_bucket_add(bucket->next, word);
   return bucket;
 }
 
