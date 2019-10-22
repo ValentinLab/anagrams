@@ -13,6 +13,9 @@
  */
 
 bool string_are_anagrams(const char *str1, const char *str2) {
+  assert(str1 != NULL);
+  assert(str2 != NULL);
+
   // Taille des chaînes de caractères
   const size_t alphabet_size = 26;
   size_t size_str = strlen(str1);
@@ -33,7 +36,7 @@ bool string_are_anagrams(const char *str1, const char *str2) {
     count_letters[str2[i] - 'a'] -= 1;
   }
 
-  // Vérifier les occurences des deux strings
+  // Contrôler les occurences des deux strings
   size_t index = 0;
   while(index < alphabet_size) {
     if(count_letters[index] != 0) {
@@ -48,6 +51,8 @@ bool string_are_anagrams(const char *str1, const char *str2) {
 }
 
 char *string_duplicate(const char *str) {
+  assert(str != NULL);
+
   // Allouer la mémoire nécessaire à la nouvelle chaîne
   char *str_cpy = malloc(strlen(str) * sizeof(char) + 1);
   if(str_cpy == NULL) {
@@ -62,6 +67,8 @@ char *string_duplicate(const char *str) {
 }
 
 void string_sort_letters(char *str) {
+  assert(str != NULL);
+
   // Taille de la chaîne à trier
   size_t size = strlen(str);
 
@@ -83,6 +90,9 @@ void string_sort_letters(char *str) {
 }
 
 void clean_newline(char *buf, size_t size) {
+  assert(buf != NULL);
+  assert(size != 0);
+
   // Rechercher l'indice du caractère de fin de ligne
   size_t i = 0;
   while(i < size - 1 && buf[i] != '\n') {
@@ -101,6 +111,8 @@ void clean_newline(char *buf, size_t size) {
 
 
 void word_array_create(struct word_array *self) {
+  assert(self != NULL);
+
   // Allouer un tableau de capacité 10 et taille 0
   self->data = calloc(10, sizeof(char *));
   self->size = 0;
@@ -108,6 +120,8 @@ void word_array_create(struct word_array *self) {
 }
 
 void word_array_destroy(struct word_array *self) {
+  assert(self != NULL);
+
   // Libérer la mémoire de tous les mots présents dans la tableau
   for(size_t i = 0; i < self->size; ++i) {
     free(self->data[i]);
@@ -124,6 +138,8 @@ void word_array_destroy(struct word_array *self) {
  * Augmenter la capacité du tableau de mots
  */
 static void word_array_grow(struct word_array *self) {
+  assert(self != NULL);
+
   // Doubler la capacité du tableau
   self->capacity *= 2;
 
@@ -137,6 +153,9 @@ static void word_array_grow(struct word_array *self) {
 }
 
 void word_array_add(struct word_array *self, const char *word) {
+  assert(self != NULL);
+  assert(word != NULL);
+
   // Vérifier la capacité du tableau
   if(self->capacity == self->size) {
     word_array_grow(self);
@@ -148,6 +167,10 @@ void word_array_add(struct word_array *self, const char *word) {
 }
 
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result) {
+  assert(self != NULL);
+  assert(word != NULL);
+  assert(result != NULL);
+
   // Comparer word avec tous les éléments du tableau
   for(size_t i = 0; i < self->size; ++i) {
     if(string_are_anagrams(self->data[i], word)) {
@@ -161,6 +184,10 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
  * Échanger deux valeurs aux indidces i et j dans un tableau
  */
 static void word_array_swap(struct word_array *self, size_t i, size_t j) {
+  assert(self != NULL);
+  assert(i < self->size);
+  assert(j < self->size);
+
   char *tmp = self->data[i];
   self->data[i] = self->data[j];
   self->data[j] = tmp;
@@ -170,6 +197,10 @@ static void word_array_swap(struct word_array *self, size_t i, size_t j) {
  * Trouver le pivot d'un tableau de mots et placer les éléments correctement
  */
 static size_t word_array_quick_sort_partition(struct word_array *self, size_t low, size_t high) {
+  assert(self != NULL);
+  assert(low < self->size);
+  assert(high < self->size);
+
   // Trouver le pivot
   size_t pivot_index = (low + high)/2;
   const char *pivot_value = self->data[pivot_index];
@@ -194,6 +225,10 @@ static size_t word_array_quick_sort_partition(struct word_array *self, size_t lo
  * Trier un tableau de mots avec QuickSort
  */
 static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdiff_t high) {
+  assert(self != NULL);
+  assert(low <= self->size);
+  assert(high <= self->size);
+
   if(low < high) {
     // Trouver le pivot
     size_t pivot = word_array_quick_sort_partition(self, low, high);
@@ -204,11 +239,15 @@ static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdif
 }
 
 void word_array_sort(struct word_array *self) {
-  // Utiliser le QuickSort
+  assert(self != NULL);
+
+  // Trier avec QuickSort
   word_array_quick_sort(self, 0, self->size - 1);
 }
 
 void word_array_print(const struct word_array *self) {
+  assert(self != NULL);
+
   // Parcourir l'ensemble des éléments du tableau
   for(size_t i = 0; i < self->size; ++i) {
     printf("%s\n", self->data[i]);
