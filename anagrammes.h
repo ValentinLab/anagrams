@@ -115,6 +115,9 @@ struct word_dict {
  */
 void word_dict_create(struct word_dict *self);
 
+/*
+ * Détruire un dictionnaire
+ */
 void word_dict_destroy(struct word_dict *self);
 
 size_t fnv_hash(const char *key);

@@ -315,7 +315,6 @@ void word_dict_create(struct word_dict *self) {
     self->buckets[i] = NULL;
   }
   self->count = 0;
-  
 }
 
 void word_dict_destroy(struct word_dict *self) {
@@ -330,7 +329,21 @@ void word_dict_destroy(struct word_dict *self) {
 }
 
 size_t fnv_hash(const char *key) {
-  return 0;
+  // Dupliquer et trier la clé
+  char *dup_key = string_duplicate(key);
+  string_sort_letters(dup_key);
+
+  // FNV-1a hash
+  const size_t key_size = strlen(dup_key);
+  size_t hash = 0xcbf29ce484222325;
+  for(size_t i = 0; i < key_size; ++i) {
+    hash = hash ^ dup_key[i];
+    hash = hash * 0x00000100000001b3;
+  }
+
+  free(dup_key);
+
+  return hash;
 }
 
 void word_dict_rehash(struct word_dict *self) {
