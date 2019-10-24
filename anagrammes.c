@@ -302,8 +302,8 @@ struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, c
   }
 
   // Ajout du noeud
-  new_node->next = bucket->next;
-  bucket->next = new_node;
+  new_node->next = bucket;
+  bucket = new_node;
 
   return bucket;
 }
