@@ -309,9 +309,16 @@ struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, c
 }
 
 void word_dict_create(struct word_dict *self) {
+  self->buckets = calloc(10, sizeof(struct word_dict_bucket*));
+  for(size_t i = 0; i < 10; ++i) {
+    self->buckets[i] = NULL;
+  }
+  self->count = 0;
+  self->size = 10;
 }
 
 void word_dict_destroy(struct word_dict *self) {
+  
 }
 
 size_t fnv_hash(const char *key) {

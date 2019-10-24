@@ -47,7 +47,7 @@ struct word_array {
 };
 
 /*
- * Initialiser une structure de tableau de mots
+ * Créer une structure de tableau de mots vide
  */
 void word_array_create(struct word_array *self);
 
@@ -110,6 +110,9 @@ struct word_dict {
   size_t size;
 };
 
+/*
+ * Créer un dictionnaire vide
+ */
 void word_dict_create(struct word_dict *self);
 
 void word_dict_destroy(struct word_dict *self);

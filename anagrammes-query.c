@@ -18,13 +18,7 @@ int main(int argc, char *argv[]) {
      * TEST
      * *****************************
      */
-    struct word_dict_bucket *b = NULL;
-
-    b = word_dict_bucket_add(b, "bonjour");
-
-    printf("%s", b->word);
-
-    word_dict_bucket_destroy(b);
+    
   }
 
   return 0;
