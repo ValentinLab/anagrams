@@ -335,10 +335,10 @@ size_t fnv_hash(const char *key) {
 
   // FNV-1a hash
   const size_t key_size = strlen(dup_key);
-  size_t hash = 0xcbf29ce484222325;
+  size_t hash = FNV_OFFSET_BASIS;
   for(size_t i = 0; i < key_size; ++i) {
     hash = hash ^ dup_key[i];
-    hash = hash * 0x00000100000001b3;
+    hash = hash * FNV_PRIME;
   }
 
   free(dup_key);
