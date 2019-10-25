@@ -109,7 +109,6 @@ void clean_newline(char *buf, size_t size) {
  * ----------------------------------------
  */
 
-
 void word_array_create(struct word_array *self) {
   assert(self != NULL);
 
