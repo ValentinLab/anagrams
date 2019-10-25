@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
      * TEST
      * *****************************
      */
-    printf("%lx\n", fnv_hash("abc"));
+    printf("%lx\n", fnv_hash(buf));
 
   }
 

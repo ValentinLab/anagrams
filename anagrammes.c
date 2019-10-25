@@ -346,6 +346,28 @@ size_t fnv_hash(const char *key) {
 }
 
 void word_dict_rehash(struct word_dict *self) {
+  // Doubler la taille du tableau
+  size_t size = self->size * 2;
+  struct word_dict_bucket **buckets = calloc(size, sizeof(struct word_dict_bucket));
+  for(size_t i = 0; i < size; ++i) {
+    buckets[i] = NULL;
+  }
+
+  // Recalculer les indices des éléments
+  for(size_t i = 0; i < self->size; ++i) {
+    struct word_dict_bucket *current = self->buckets[i];
+    while(current != NULL) {
+      size_t new_index = fnv_hash(current->word) % size;
+      word_dict_bucket_add(self->buckets[new_index], current->word);
+      current = current->next;
+    }
+    word_dict_bucket_destroy(self->buckets[i]);
+  }
+
+  // Insérer les nouvelles valeurs dans la structure
+  self->size = size;
+  free(self->buckets);
+  self->buckets = buckets;
 }
 
 void word_dict_add(struct word_dict *self, const char *word) {
