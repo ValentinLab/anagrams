@@ -328,6 +328,8 @@ void word_dict_destroy(struct word_dict *self) {
 }
 
 size_t fnv_hash(const char *key) {
+  assert(key != NULL);
+
   // Dupliquer et trier la clé
   char *dup_key = string_duplicate(key);
   string_sort_letters(dup_key);
@@ -346,6 +348,8 @@ size_t fnv_hash(const char *key) {
 }
 
 void word_dict_rehash(struct word_dict *self) {
+  assert(self != NULL);
+
   // Doubler la taille du tableau
   size_t size = self->size * 2;
   struct word_dict_bucket **buckets = calloc(size, sizeof(struct word_dict_bucket));
@@ -371,6 +375,17 @@ void word_dict_rehash(struct word_dict *self) {
 }
 
 void word_dict_add(struct word_dict *self, const char *word) {
+  assert(self != NULL);
+  assert(word != NULL);
+
+  // Effectuer un rehash si nécessaire
+  if(self->count / self->size >= 0.5) {
+    word_dict_rehash(self);
+  }
+
+  // Ajouter un nouvel élément au dictionnaire
+  size_t index = fnv_hash(word) % self->size;
+  word_dict_bucket_add(self->buckets[index], word);
 }
 
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array) {

@@ -128,8 +128,14 @@ void word_dict_destroy(struct word_dict *self);
  */
 size_t fnv_hash(const char *key);
 
+/*
+ * Effectuer un rehash du dictionnaire
+ */
 void word_dict_rehash(struct word_dict *self);
 
+/*
+ * Ajouter un nouvel élément au dictionnaire
+ */
 void word_dict_add(struct word_dict *self, const char *word);
 
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array);

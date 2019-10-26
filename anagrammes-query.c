@@ -18,7 +18,13 @@ int main(int argc, char *argv[]) {
      * TEST
      * *****************************
      */
-    printf("%lx\n", fnv_hash(buf));
+    struct word_dict dict;
+
+    word_dict_create(&dict);
+
+    word_dict_add(&dict, "coucou");
+
+    word_dict_destroy(&dict);
 
   }
 
