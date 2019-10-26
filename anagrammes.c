@@ -362,7 +362,7 @@ void word_dict_rehash(struct word_dict *self) {
     struct word_dict_bucket *current = self->buckets[i];
     while(current != NULL) {
       size_t new_index = fnv_hash(current->word) % size;
-      word_dict_bucket_add(self->buckets[new_index], current->word);
+      buckets[new_index] = word_dict_bucket_add(buckets[new_index], current->word);
       current = current->next;
     }
     word_dict_bucket_destroy(self->buckets[i]);
@@ -385,7 +385,7 @@ void word_dict_add(struct word_dict *self, const char *word) {
 
   // Ajouter un nouvel élément au dictionnaire
   size_t index = fnv_hash(word) % self->size;
-  word_dict_bucket_add(self->buckets[index], word);
+  self->buckets[index] = word_dict_bucket_add(self->buckets[index], word);
 }
 
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array) {
