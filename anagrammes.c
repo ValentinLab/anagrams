@@ -392,6 +392,12 @@ void word_dict_add(struct word_dict *self, const char *word) {
 }
 
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array) {
+  assert(self != NULL);
+  assert(array != NULL);
+
+  for(size_t i = 0; i < array->size; ++i) {
+    word_dict_add(self, array->data[i]);
+  }
 }
 
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result) {
