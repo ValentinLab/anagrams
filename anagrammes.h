@@ -138,8 +138,14 @@ void word_dict_rehash(struct word_dict *self);
  */
 void word_dict_add(struct word_dict *self, const char *word);
 
+/*
+ * Remplir un dictionnnaire à partir d'un tableau de mots
+ */
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array);
 
+/*
+ * Rechercher les anagrammes d'un mot dans un dictionnaire
+ */
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result);
 
 /* 
