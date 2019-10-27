@@ -401,6 +401,18 @@ void word_dict_fill_with_array(struct word_dict *self, const struct word_array *
 }
 
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result) {
+  // Parcourir le dictionnaire
+  for(size_t i = 0; i < self->size; ++i) {
+    struct word_dict_bucket *current = self->buckets[i];
+    while(current != NULL) {
+      // Vérifier si le mot courant est un anagramme de word
+      if(string_are_anagrams(current->word, word)) {
+        // Ajouter le mot au tableau de mots
+        word_array_add(result, word);
+      }
+      current = current->next;
+    }
+  }
 }
 
 /* 
