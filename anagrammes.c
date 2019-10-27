@@ -40,6 +40,7 @@ bool string_are_anagrams(const char *str1, const char *str2) {
   size_t index = 0;
   while(index < alphabet_size) {
     if(count_letters[index] != 0) {
+      free(count_letters);
       return false;
     }
     ++index;
