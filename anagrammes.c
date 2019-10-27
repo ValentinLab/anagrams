@@ -96,8 +96,10 @@ void clean_newline(char *buf, size_t size) {
   // Rechercher l'indice du caractère de fin de ligne
   size_t i = 0;
   while(i < size - 1 && buf[i] != '\n') {
+    printf("( %c )", buf[i]);
     ++i;
   }
+  printf("\n");
 
   // Remplacer le caractère par celui de fin de chaîne
   buf[i] = '\0';
@@ -254,15 +256,17 @@ void word_array_print(const struct word_array *self) {
 }
 
 void word_array_read_file(struct word_array *self, const char *filename) {
+  // Buffer du mot à lire
   char word[WORD_LETTERS_MAX];
 
+  // Ouvrir le fichier à lire
   FILE *fp = fopen(filename, "r");
-
   if (fp == NULL) {
     fprintf(stderr, "Error when opening file '%s'\n", filename);
     return;
   }
 
+  // Parcourir l'ensemble du fichier
   while (!feof(fp)) {
     fgets(word, WORD_LETTERS_MAX, fp);
     clean_newline(word, WORD_LETTERS_MAX);
