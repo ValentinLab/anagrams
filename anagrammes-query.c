@@ -26,8 +26,6 @@ int main(int argc, char *argv[]) {
     word_dict_add(&dict, "bonjour");
     word_dict_add(&dict, "salut");
 
-    word_dict_rehash(&dict);
-
     word_dict_destroy(&dict);
 
   }
