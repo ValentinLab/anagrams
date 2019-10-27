@@ -96,10 +96,8 @@ void clean_newline(char *buf, size_t size) {
   // Rechercher l'indice du caractère de fin de ligne
   size_t i = 0;
   while(i < size - 1 && buf[i] != '\n') {
-    printf("( %c )", buf[i]);
     ++i;
   }
-  printf("\n");
 
   // Remplacer le caractère par celui de fin de chaîne
   buf[i] = '\0';
@@ -267,7 +265,7 @@ void word_array_read_file(struct word_array *self, const char *filename) {
   }
 
   // Parcourir l'ensemble du fichier
-  while (!feof(fp)) {
+  while(!feof(fp)) {
     fgets(word, WORD_LETTERS_MAX, fp);
     clean_newline(word, WORD_LETTERS_MAX);
     word_array_add(self, word);
@@ -412,7 +410,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
       // Vérifier si le mot courant est un anagramme de word
       if(string_are_anagrams(current->word, word)) {
         // Ajouter le mot au tableau de mots
-        word_array_add(result, word);
+        word_array_add(result, current->word);
       }
       current = current->next;
     }
