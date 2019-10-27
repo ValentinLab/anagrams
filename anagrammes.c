@@ -361,11 +361,14 @@ void word_dict_rehash(struct word_dict *self) {
   for(size_t i = 0; i < self->size; ++i) {
     struct word_dict_bucket *current = self->buckets[i];
     while(current != NULL) {
+      // Obtenir le nouvel indice
       size_t new_index = fnv_hash(current->word) % size;
-      buckets[new_index] = word_dict_bucket_add(buckets[new_index], current->word);
+      // Déplacer le noued dans la nouvel liste
+      struct word_dict_bucket *tmp = current;
       current = current->next;
+      tmp->next = buckets[new_index];
+      buckets[new_index] = tmp;
     }
-    word_dict_bucket_destroy(self->buckets[i]);
   }
 
   // Insérer les nouvelles valeurs dans la structure
