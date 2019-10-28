@@ -100,7 +100,13 @@ int main(int argc, char *argv[]) {
     word_array_print(&result);
     
     // Afficher le nombre d'anagrammes et le temps
-    printf("\n--- %ld anagrams found ---\n", result.size);
+    printf("\n--- %ld ", result.size);
+    if(result.size > 1) {
+      printf("anagrams");
+    } else {
+      printf("anagram");
+    }
+    printf(" found ---\n");
     printf("--- %d µs (word_array) ---\n", word_array_exec_time);
     printf("--- %d µs (word_dict) ---\n", word_dict_exec_time);
 
