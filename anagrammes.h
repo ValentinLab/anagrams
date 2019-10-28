@@ -154,7 +154,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
  * ----------------------------------------
  */
 
-#define WILDCARDS_MAX 3
+#define WILDCARDS_MAX 4
 
 struct wildcard {
   size_t count;

@@ -442,6 +442,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
  */
 
 void wildcard_create(struct wildcard *self) {
+  self->count = 0;
 }
 
 void wildcard_search(struct wildcard *self, const char *word) {
