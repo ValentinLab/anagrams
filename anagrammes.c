@@ -209,7 +209,7 @@ static size_t word_array_quick_sort_partition(struct word_array *self, size_t lo
   word_array_swap(self, pivot_index, high);
   size_t current = low;
   for(size_t i = low; i < high; ++i) {
-    if(strcmp(pivot_value, self->data[i]) < 0) {
+    if(strcmp(pivot_value, self->data[i]) > 0) {
       word_array_swap(self, i, current);
       ++current;
     }

@@ -67,7 +67,7 @@ void word_array_add(struct word_array *self, const char *word);
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result);
 
 /*
- * Trier les mpts d'un tableau (tri rapide)
+ * Trier les mots d'un tableau (tri rapide)
  */
 void word_array_sort(struct word_array *self);
 

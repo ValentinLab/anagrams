@@ -26,27 +26,36 @@ int main(int argc, char *argv[]) {
   // Rechercher des anagrammes
   char buf[BUFSIZE];
   struct word_array result;
-  do {
+  for(;;) {
     // Demander à l'utilisateur de saisir des lettres
     printf("Letters: ");
     fgets(buf, BUFSIZE, stdin);
     clean_newline(buf, BUFSIZE);
+
+    // Vérifier que le mot n'est pas vide
+    if(buf[0] == '\0') {
+      // Détruire les structures
+      word_array_destroy(&dict_array);
+      word_dict_destroy(&dict);
+
+      return 0;
+    }
 
     // Rechercher les anagrammes
     word_array_create(&result);
     word_dict_search_anagrams(&dict, buf, &result);
 
     // Afficher les résultats
+    word_array_sort(&result);
     word_array_print(&result);
+    
+    // Afficher le nombre d'anagrammes et le temps
+    printf("\n--- %ld anagrams found ---\n", result.size);
 
+    // Détruire le tableau de mot
     word_array_destroy(&result);
     printf("\n");
-
-  } while(buf[0] != '\0');
-
-  // Détruire les structures
-  word_array_destroy(&dict_array);
-  word_dict_destroy(&dict);
+  }
 
   return 0;
 }
