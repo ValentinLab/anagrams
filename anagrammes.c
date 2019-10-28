@@ -226,8 +226,8 @@ static size_t word_array_quick_sort_partition(struct word_array *self, size_t lo
  */
 static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdiff_t high) {
   assert(self != NULL);
-  assert(low <= self->size);
-  assert(high <= self->size);
+  assert(low <= (ptrdiff_t)self->size);
+  assert(high <= (ptrdiff_t)self->size);
 
   if(low < high) {
     // Trouver le pivot
@@ -463,6 +463,7 @@ void wildcard_search(struct wildcard *self, const char *word) {
 }
 
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result) {
+  
 }
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {

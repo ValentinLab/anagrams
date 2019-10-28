@@ -167,10 +167,13 @@ struct wildcard {
 void wildcard_create(struct wildcard *self);
 
 /*
- * Rechercher les joekrs dans une chaîne de caractère
+ * Rechercher les jokers dans une chaîne de caractère
  */
 void wildcard_search(struct wildcard *self, const char *word);
 
+/*
+ * Rechercher les anagrammes d'un mot avec joker(s) dans un tableau de mots
+ */
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result);
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result);
