@@ -6,6 +6,7 @@
 
 #define DICT_FILE "dictionnaire.txt"
 #define BUFSIZE 512
+#define SEC_TO_US 1000000
 
 int main(int argc, char *argv[]) {
   // Lire le fichier dictionnaire
@@ -66,7 +67,9 @@ int main(int argc, char *argv[]) {
     // Temps après la recherche
     struct timeval word_array_time;
     gettimeofday(&word_array_time, NULL);
-    int word_array_exec_time = (word_array_time.tv_sec * 1000000 + word_array_time.tv_usec) - (init_time.tv_sec * 1000000 + init_time.tv_usec);
+    int word_array_exec_time = (word_array_time.tv_sec * SEC_TO_US + word_array_time.tv_usec) - (init_time.tv_sec * SEC_TO_US + init_time.tv_usec);
+    
+    word_array_destroy(&result);
 
     /* 
      * ----------------------------------------
@@ -74,7 +77,7 @@ int main(int argc, char *argv[]) {
      * ----------------------------------------
      */
 
-   // Obtenir le temps avant la recherche
+    // Obtenir le temps avant la recherche
     gettimeofday(&init_time, NULL);
 
     // Rechercher les anagrammes
@@ -84,7 +87,7 @@ int main(int argc, char *argv[]) {
     // Obtenir le temps après la recherche
     struct timeval dict_time;
     gettimeofday(&dict_time, NULL);
-    int word_dict_exec_time = (dict_time.tv_sec * 1000000 + dict_time.tv_usec) - (init_time.tv_sec * 1000000 + init_time.tv_usec);
+    int word_dict_exec_time = (dict_time.tv_sec * SEC_TO_US + dict_time.tv_usec) - (init_time.tv_sec * SEC_TO_US + init_time.tv_usec);
 
     /* 
      * ----------------------------------------

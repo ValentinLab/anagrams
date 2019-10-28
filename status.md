@@ -5,4 +5,4 @@ Anagrammes
 - [X] Part 2 : Word array *(7/7)*
 - [X] Part 3 : Dictionnary *(9/9)*
 - [ ] Part 4 : Wildcards *(0/4)*
-- [ ] Part 5 : Interactive app
+- [X] Part 5 : Interactive app
