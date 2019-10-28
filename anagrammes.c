@@ -238,11 +238,28 @@ static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdif
   }
 }
 
+static bool word_array_is_sorted(const struct word_array *self) {
+  assert(self != NULL);
+
+  // Parcourir le tableau de mots
+  size_t index = 0;
+  while(index < self->size - 1) {
+    if(strcmp(self->data[index], self->data[index + 1]) > 0) {
+      return false;
+    }
+    ++index;
+  }
+
+  return true;
+}
+
 void word_array_sort(struct word_array *self) {
   assert(self != NULL);
 
   // Trier avec QuickSort
-  word_array_quick_sort(self, 0, self->size - 1);
+  if(self->size > 0 && !word_array_is_sorted(self)) {
+    word_array_quick_sort(self, 0, self->size - 1);
+  }
 }
 
 void word_array_print(const struct word_array *self) {
