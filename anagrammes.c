@@ -442,10 +442,24 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
  */
 
 void wildcard_create(struct wildcard *self) {
+  assert(self != NULL);
+
   self->count = 0;
 }
 
 void wildcard_search(struct wildcard *self, const char *word) {
+  assert(self != NULL);
+  assert(word != NULL);
+
+  // Pacourir word
+  size_t index = 0;
+  while(word[index] != '\0' || self->count < 4) {
+    if(word[index] == '*') {
+      self->index[self->count] = index;
+      self->count += 1;
+    }
+    ++index;
+  }
 }
 
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result) {

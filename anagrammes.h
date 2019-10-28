@@ -161,8 +161,14 @@ struct wildcard {
   size_t index[WILDCARDS_MAX];
 };
 
+/*
+ * Créer une structure joker
+ */
 void wildcard_create(struct wildcard *self);
 
+/*
+ * Rechercher les joekrs dans une chaîne de caractère
+ */
 void wildcard_search(struct wildcard *self, const char *word);
 
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result);
