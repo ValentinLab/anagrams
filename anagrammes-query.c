@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #define DICT_FILE "dictionnaire.txt"
 #define BUFSIZE 512
@@ -14,7 +15,7 @@ int main(int argc, char *argv[]) {
 
   // Vérifier que tous les mots sont dans la tableau de mots
   if(dict_array.size != 325129 + 1) {
-    printf("Le nombre de mots est incorrecte.\n");
+    printf("Issue with words number.\n");
     return 1;
   }
 
@@ -27,30 +28,78 @@ int main(int argc, char *argv[]) {
   char buf[BUFSIZE];
   struct word_array result;
   for(;;) {
+    /* 
+     * ----------------------------------------
+     * -> Obtenir la saisie de l'utilisateur
+     * ----------------------------------------
+     */
+
     // Demander à l'utilisateur de saisir des lettres
     printf("Letters: ");
     fgets(buf, BUFSIZE, stdin);
     clean_newline(buf, BUFSIZE);
 
-    // Vérifier que le mot n'est pas vide
+    // Vérifier si le mot est vide et quitter le programme dans ce cas
     if(buf[0] == '\0') {
-      // Détruire les structures
       word_array_destroy(&dict_array);
       word_dict_destroy(&dict);
 
       return 0;
     }
 
+    // Temps actuel
+    struct timeval init_time;
+
+    /* 
+     * ----------------------------------------
+     * -> Rechercher via word_array
+     * ----------------------------------------
+     */
+
+    // Obtenir le temps avant la recherche
+    gettimeofday(&init_time, NULL);
+
+    // Rechercher les anagrammes
+    word_array_create(&result);
+    word_array_search_anagrams(&dict_array, buf, &result);
+
+    // Temps après la recherche
+    struct timeval word_array_time;
+    gettimeofday(&word_array_time, NULL);
+    int word_array_exec_time = (word_array_time.tv_sec * 1000000 + word_array_time.tv_usec) - (init_time.tv_sec * 1000000 + init_time.tv_usec);
+
+    /* 
+     * ----------------------------------------
+     * -> Rechercher via word_dict
+     * ----------------------------------------
+     */
+
+   // Obtenir le temps avant la recherche
+    gettimeofday(&init_time, NULL);
+
     // Rechercher les anagrammes
     word_array_create(&result);
     word_dict_search_anagrams(&dict, buf, &result);
 
-    // Afficher les résultats
+    // Obtenir le temps après la recherche
+    struct timeval dict_time;
+    gettimeofday(&dict_time, NULL);
+    int word_dict_exec_time = (dict_time.tv_sec * 1000000 + dict_time.tv_usec) - (init_time.tv_sec * 1000000 + init_time.tv_usec);
+
+    /* 
+     * ----------------------------------------
+     * -> Afficher les résultats
+     * ----------------------------------------
+     */
+
+    // Afficher les anagrammes trouvés dans l'ordre alphabétique
     word_array_sort(&result);
     word_array_print(&result);
     
     // Afficher le nombre d'anagrammes et le temps
     printf("\n--- %ld anagrams found ---\n", result.size);
+    printf("--- %d µs (word_array) ---\n", word_array_exec_time);
+    printf("--- %d µs (word_dict) ---\n", word_dict_exec_time);
 
     // Détruire le tableau de mot
     word_array_destroy(&result);
