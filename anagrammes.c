@@ -453,7 +453,7 @@ void wildcard_search(struct wildcard *self, const char *word) {
 
   // Pacourir word
   size_t index = 0;
-  while(word[index] != '\0' || self->count < 4) {
+  while(word[index] != '\0' && self->count < 4) {
     if(word[index] == '*') {
       self->index[self->count] = index;
       self->count += 1;
@@ -463,7 +463,28 @@ void wildcard_search(struct wildcard *self, const char *word) {
 }
 
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result) {
-  
+  assert(self != NULL);
+  assert(word != NULL);
+  assert(result != NULL);
+
+  // Compter les jokers dans word
+  struct wildcard word_w;
+  wildcard_create(&word_w);
+  wildcard_search(&word_w, word);
+
+  // Vérifier s'il n'y a pas de jokers dans le mot
+  if(word_w.count == 0) {
+    word_array_search_anagrams(self, word, result);
+    return;
+  }
+
+  // Trouver les anagrammes de word en prenant en compte les jokers
+  char* changed_word = string_duplicate(word);
+  for(size_t i = 0; i < 26; ++i) {
+    changed_word[word_w.index[0]] = 'a' + i;
+    word_array_search_anagrams(self, changed_word, result);
+  }
+  free(changed_word);
 }
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
