@@ -171,6 +171,8 @@ void wildcard_create(struct wildcard *self);
  */
 void wildcard_search(struct wildcard *self, const char *word);
 
+#define ALPHABET_SIZE 26
+
 /*
  * Rechercher les anagrammes d'un mot avec joker(s) dans un tableau de mots
  */

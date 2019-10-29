@@ -480,10 +480,40 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
 
   // Trouver les anagrammes de word en prenant en compte les jokers
   char* changed_word = string_duplicate(word);
-  for(size_t i = 0; i < 26; ++i) {
+  for(size_t i = 0; i < ALPHABET_SIZE; ++i) { // parcourir l'ensemble de l'alphabet
+    // Remplacer le premier joker
     changed_word[word_w.index[0]] = 'a' + i;
-    word_array_search_anagrams(self, changed_word, result);
+
+    // Remplacer le deuxième joker
+    if(word_w.count > 1) {
+      for(size_t j = i; j < ALPHABET_SIZE; ++j) {
+        changed_word[word_w.index[1]] = 'a' + j;
+
+        // Replacer le troisème joker
+        if(word_w.count > 2) {
+          for(size_t k = j; k < ALPHABET_SIZE; ++k) {
+            changed_word[word_w.index[2]] = 'a' + k;
+
+            // Remplacer le quatième joker
+            if(word_w.count > 3) {
+              for(size_t l = k; l < ALPHABET_SIZE; ++l) {
+                changed_word[word_w.index[3]] = 'a' + l;
+
+                word_array_search_anagrams(self, changed_word, result);
+              }
+            } else {
+              word_array_search_anagrams(self, changed_word, result);
+            }
+          }
+        } else {
+          word_array_search_anagrams(self, changed_word, result);
+        }
+      }
+    } else {
+      word_array_search_anagrams(self, changed_word, result);
+    }
   }
+
   free(changed_word);
 }
 
