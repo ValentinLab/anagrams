@@ -197,7 +197,7 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
 
   // Comparer word avec tous les éléments du tableau
   for(size_t i = 0; i < self->size; ++i) {
-    if(string_are_anagrams(word, self->data[i])) {
+    if(string_are_anagrams(self->data[i], word)) {
       // Ajouter l'anagramme au tableau resultat
       word_array_add(result, self->data[i]);
     }
@@ -491,55 +491,26 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
   assert(word != NULL);
   assert(result != NULL);
 
-  // Compter les jokers dans word
-  struct wildcard word_w;
-  wildcard_create(&word_w);
-  wildcard_search(&word_w, word);
-
-  // Vérifier s'il n'y a pas de jokers dans le mot
-  if(word_w.count == 0) {
-    word_array_search_anagrams(self, word, result);
-    return;
-  }
-
-  // Trouver les anagrammes de word en prenant en compte les jokers
-  char* changed_word = string_duplicate(word);
-  for(size_t i = 0; i < ALPHABET_SIZE; ++i) { // parcourir l'ensemble de l'alphabet
-    // Remplacer le premier joker
-    changed_word[word_w.index[0]] = 'a' + i;
-
-    // Remplacer le deuxième joker
-    if(word_w.count > 1) {
-      for(size_t j = i; j < ALPHABET_SIZE; ++j) {
-        changed_word[word_w.index[1]] = 'a' + j;
-
-        // Replacer le troisème joker
-        if(word_w.count > 2) {
-          for(size_t k = j; k < ALPHABET_SIZE; ++k) {
-            changed_word[word_w.index[2]] = 'a' + k;
-
-            // Remplacer le quatième joker
-            if(word_w.count > 3) {
-              for(size_t l = k; l < ALPHABET_SIZE; ++l) {
-                changed_word[word_w.index[3]] = 'a' + l;
-
-                word_array_search_anagrams(self, changed_word, result);
-              }
-            } else {
-              word_array_search_anagrams(self, changed_word, result);
-            }
-          }
-        } else {
-          word_array_search_anagrams(self, changed_word, result);
-        }
-      }
-    } else {
-      word_array_search_anagrams(self, changed_word, result);
+  // Comparer word avec tous les éléments du tableau
+  for(size_t i = 0; i < self->size; ++i) {
+    if(string_are_anagrams(word, self->data[i])) {
+      // Ajouter l'anagramme au tableau resultat
+      word_array_add(result, self->data[i]);
     }
   }
-
-  free(changed_word);
 }
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
+  // Parcourir le dictionnaire
+  for(size_t i = 0; i < self->size; ++i) {
+    struct word_dict_bucket *current = self->buckets[i];
+    while(current != NULL) {
+      // Vérifier si le mot courant est un anagramme de word
+      if(string_are_anagrams(word, current->word)) {
+        // Ajouter le mot au tableau de mots
+        word_array_add(result, current->word);
+      }
+      current = current->next;
+    }
+  }
 }

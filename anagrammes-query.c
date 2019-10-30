@@ -62,14 +62,14 @@ int main(int argc, char *argv[]) {
 
     // Rechercher les anagrammes
     word_array_create(&result);
-    word_array_search_anagrams(&dict_array, buf, &result);
+    word_array_search_anagrams_wildcard(&dict_array, buf, &result);
 
     // Temps après la recherche
     struct timeval word_array_time;
     gettimeofday(&word_array_time, NULL);
     int word_array_exec_time = (word_array_time.tv_sec * SEC_TO_US + word_array_time.tv_usec) - (init_time.tv_sec * SEC_TO_US + init_time.tv_usec);
     
-      //word_array_destroy(&result);
+    word_array_destroy(&result);
 
     /* 
      * ----------------------------------------
@@ -81,8 +81,8 @@ int main(int argc, char *argv[]) {
     gettimeofday(&init_time, NULL);
 
     // Rechercher les anagrammes
-      //word_array_create(&result);
-      //word_dict_search_anagrams(&dict, buf, &result);
+    word_array_create(&result);
+    word_dict_search_anagrams_wildcard(&dict, buf, &result);
 
     // Obtenir le temps après la recherche
     struct timeval dict_time;
