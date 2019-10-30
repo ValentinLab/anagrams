@@ -319,6 +319,9 @@ void word_array_print(const struct word_array *self) {
 }
 
 void word_array_read_file(struct word_array *self, const char *filename) {
+  assert(self != NULL);
+  assert(filename != NULL);
+
   // Buffer
   char word[WORD_LETTERS_MAX];
 

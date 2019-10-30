@@ -20,17 +20,17 @@ extern "C" {
 #define WILDCARDS_MAX 4
 
 /*
- * Comparer deux strings pour savoir si ce sont des anagrammes
+ * Comparer deux chaînes de caractères pour savoir si ce sont des anagrammes
  */
 bool string_are_anagrams(const char *str1, const char *str2);
 
 /*
- * Dupliquer une string
+ * Dupliquer une chaîne de caractères
  */
 char *string_duplicate(const char *str);
 
 /*
- * Trier les letres d'une string (tri par insertion)
+ * Trier les letres d'une chaîne de caractères (tri par insertion)
  */
 void string_sort_letters(char *str);
 
@@ -52,39 +52,39 @@ struct word_array {
 };
 
 /*
- * Créer une structure de tableau de mots vide
+ * Créer une structure tableau de mots vide
  */
 void word_array_create(struct word_array *self);
 
 /*
- * Détruire une structure de tableau de mots
+ * Détruire une structure tableau de mots
  */
 void word_array_destroy(struct word_array *self);
 
 /*
- * Ajouter un nouveau mot dans un tableau
+ * Ajouter un nouveau mot à la fin d'un tableau de mots
  */
 void word_array_add(struct word_array *self, const char *word);
 
 /*
- * Rechercher les anagrammes d'un mot dans un tableau
+ * Rechercher les anagrammes d'un mot parmi ceux d'un tablau de mots
  */
 void word_array_search_anagrams(const struct word_array *self, const char *word, struct word_array *result);
 
 /*
- * Trier les mots d'un tableau (tri rapide)
+ * Trier un tableau de mots (tri quicksort)
  */
 void word_array_sort(struct word_array *self);
 
 /*
- * Afficher tous les mots d'un tableau (un par ligne)
+ * Afficher le contenu d'un tableau de mot (un mot par ligne)
  */
 void word_array_print(const struct word_array *self);
 
 #define WORD_LETTERS_MAX 32
 
 /*
- * Lire le contenu d'un fichier texte
+ * Lire le contenu d'un fichier texte et le placer dans un tableau de mots
  */
 void word_array_read_file(struct word_array *self, const char *filename);
 
@@ -100,12 +100,12 @@ struct word_dict_bucket {
 };
 
 /*
- * Détruire une liste chaînée
+ * Détruire une structure word_dict_bucket
  */
 void word_dict_bucket_destroy(struct word_dict_bucket *bucket);
 
 /*
- * Ajouter un élément dans une liste chaînée
+ * Ajouter un élément à la structure word_dict_bucket
  */
 struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word);
 
@@ -116,12 +116,12 @@ struct word_dict {
 };
 
 /*
- * Créer un dictionnaire vide
+ * Créer une structure dictionnaire vide
  */
 void word_dict_create(struct word_dict *self);
 
 /*
- * Détruire un dictionnaire
+ * Détruire un structure dictionnaire
  */
 void word_dict_destroy(struct word_dict *self);
 
@@ -134,14 +134,14 @@ void word_dict_destroy(struct word_dict *self);
 size_t fnv_hash(const char *key);
 
 /*
- * Effectuer un rehash du dictionnaire
+ * Effectuer le rehash d'un dictionnaire
  */
 void word_dict_rehash(struct word_dict *self);
 
 #define COLLISION_FACTOR 0.5
 
 /*
- * Ajouter un nouvel élément au dictionnaire
+ * Ajouter un nouvel élément dans un dictionnaire
  */
 void word_dict_add(struct word_dict *self, const char *word);
 
@@ -151,7 +151,7 @@ void word_dict_add(struct word_dict *self, const char *word);
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array);
 
 /*
- * Rechercher les anagrammes d'un mot dans un dictionnaire
+ * Rechercher les anagrammes d'un mot parmi ceux d'un dictionnaire
  */
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result);
 
@@ -177,12 +177,12 @@ void wildcard_create(struct wildcard *self);
 void wildcard_search(struct wildcard *self, const char *word);
 
 /*
- * Rechercher les anagrammes d'un mot avec ou sans joker(s) dans un tableau de mots
+ * Rechercher les anagrammes d'un mot avec ou sans joker parmi ceux d'un tableau de mots
  */
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result);
 
 /*
- * Rechercher les anagrammes d'un mot avec ou sans joker(s) dans un tableau de mots
+ * Rechercher les anagrammes d'un mot avec ou sans joker parmi ceux d'un dictionnaire
  */
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result);
 
