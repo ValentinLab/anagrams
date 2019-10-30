@@ -445,6 +445,10 @@ void word_dict_fill_with_array(struct word_dict *self, const struct word_array *
 }
 
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result) {
+  assert(self != NULL);
+  assert(word != NULL);
+  assert(result != NULL);
+
   // Parcourir le dictionnaire
   for(size_t i = 0; i < self->size; ++i) {
     struct word_dict_bucket *current = self->buckets[i];
@@ -501,6 +505,10 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
 }
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
+  assert(self != NULL);
+  assert(word != NULL);
+  assert(result != NULL);
+  
   // Parcourir le dictionnaire
   for(size_t i = 0; i < self->size; ++i) {
     struct word_dict_bucket *current = self->buckets[i];
