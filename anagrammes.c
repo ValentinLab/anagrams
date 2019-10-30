@@ -16,38 +16,62 @@ bool string_are_anagrams(const char *str1, const char *str2) {
   assert(str1 != NULL);
   assert(str2 != NULL);
 
-  // Taille des chaînes de caractères
-  const size_t alphabet_size = 26;
+  // Taille de str1
   size_t size_str = strlen(str1);
 
-  // Comparer la taille des deux chaînes
+  // Vérifier si str1 et str2 ont la même taille
   if(size_str != strlen(str2)) {
     return false;
   }
 
-  // Compter les occurences de chaque lettre pout str1 et str2
-  int *count_letters = calloc(alphabet_size, sizeof(int));
+  // Compter les occurences de chaque lettre pout str1 et str2 et le nombre de jokers dans str1
+  int wildcards_number = 0;
+  int *count_letters = calloc(ALPHABET_SIZE, sizeof(int));
   if(count_letters == NULL) {
     printf("Problème lors de l'allocation de la mémoire.\n");
     return false;
   }
   for(size_t i = 0; i < size_str; ++i) {
-    count_letters[str1[i] - 'a'] += 1;
+    if(str1[i] != '*') {
+      // Incrémenter l'élément du tableau correspondant à la lettre courante de str1
+      count_letters[str1[i] - 'a'] += 1;
+    } else {
+      // Décrémenter le nombre de joker si la lettre courante est '*'
+      --wildcards_number;
+    }
+    // Décrémenter l'élément du tableau correspondant à la lettre courante de str1
     count_letters[str2[i] - 'a'] -= 1;
   }
 
-  // Contrôler les occurences des deux strings
+  // Contrôler les occurences des deux strings dans le tableau count_letters
   size_t index = 0;
-  while(index < alphabet_size) {
-    if(count_letters[index] != 0) {
+  while(index < ALPHABET_SIZE) {
+    // Vérifier que str1 compte bien au maximum 4 jokers
+    if(-wildcards_number > WILDCARDS_MAX) {
       free(count_letters);
       return false;
     }
+    // Vérifier que str1 en compte pas plus d'occurences que str1
+    // Vérifier que le nombre d'occurence de str2 n'est pas plus important que le nombre de jokers de str1
+    if(count_letters[index] > 0 || count_letters[index] < wildcards_number) {
+      free(count_letters);
+      return false;
+    }
+    // Vérifier si str2 compte plus d'occurences que str1 et vérifier s'il y a assez de jokers
+    if(count_letters[index] < 0) {
+      // S'il n'y a plus ou pas de jokers
+      if(wildcards_number == 0) {
+        free(count_letters);
+        return false;
+      }
+      // Retirer les jokers utilisés par les occurences de la lettre courante de str2
+      wildcards_number += count_letters[index];
+    }
+
     ++index;
   }
 
   free(count_letters);
-
   return true;
 }
 
@@ -173,7 +197,7 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
 
   // Comparer word avec tous les éléments du tableau
   for(size_t i = 0; i < self->size; ++i) {
-    if(string_are_anagrams(self->data[i], word)) {
+    if(string_are_anagrams(word, self->data[i])) {
       // Ajouter l'anagramme au tableau resultat
       word_array_add(result, self->data[i]);
     }

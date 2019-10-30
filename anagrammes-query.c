@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 
     // Rechercher les anagrammes
     word_array_create(&result);
-    word_array_search_anagrams_wildcard(&dict_array, buf, &result);
+    word_array_search_anagrams(&dict_array, buf, &result);
 
     // Temps après la recherche
     struct timeval word_array_time;

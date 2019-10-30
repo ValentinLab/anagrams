@@ -14,6 +14,9 @@ extern "C" {
  * ----------------------------------------
  */
 
+#define ALPHABET_SIZE 26
+#define WILDCARDS_MAX 4
+
 /*
  * Comparer deux strings pour savoir si ce sont des anagrammes
  */
@@ -154,8 +157,6 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
  * ----------------------------------------
  */
 
-#define WILDCARDS_MAX 4
-
 struct wildcard {
   size_t count;
   size_t index[WILDCARDS_MAX];
@@ -170,8 +171,6 @@ void wildcard_create(struct wildcard *self);
  * Rechercher les jokers dans une chaîne de caractère
  */
 void wildcard_search(struct wildcard *self, const char *word);
-
-#define ALPHABET_SIZE 26
 
 /*
  * Rechercher les anagrammes d'un mot avec joker(s) dans un tableau de mots
