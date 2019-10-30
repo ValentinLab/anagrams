@@ -38,7 +38,7 @@ bool string_are_anagrams(const char *str1, const char *str2) {
       count_letters[str1[i] - 'a'] += 1;
     } else {
       // Décrémenter le nombre de joker
-      --wildcards_number;
+      wildcards_number -= 1;
 
       // Vérifier que str1 comporte au maximum 4 jokers
       if(-wildcards_number > WILDCARDS_MAX) {
