@@ -65,7 +65,7 @@ bool string_are_anagrams(const char *str1, const char *str2) {
         return false;
       }
       // Retirer les jokers utilisés par les occurences de la lettre courante de str2
-      wildcards_number += count_letters[index];
+      wildcards_number -= count_letters[index];
     }
 
     ++index;
@@ -495,10 +495,10 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
   assert(word != NULL);
   assert(result != NULL);
 
-  // Comparer word avec tous les éléments du tableau
+  // Comparer word avec tous les éléments du tableau et vérifier si ce sont des anagrammes
   for(size_t i = 0; i < self->size; ++i) {
     if(string_are_anagrams(word, self->data[i])) {
-      // Ajouter l'anagramme au tableau resultat
+      // Ajouter l'anagramme au tableau result
       word_array_add(result, self->data[i]);
     }
   }
@@ -508,14 +508,14 @@ void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char
   assert(self != NULL);
   assert(word != NULL);
   assert(result != NULL);
-  
+
   // Parcourir le dictionnaire
   for(size_t i = 0; i < self->size; ++i) {
     struct word_dict_bucket *current = self->buckets[i];
     while(current != NULL) {
       // Vérifier si le mot courant est un anagramme de word
       if(string_are_anagrams(word, current->word)) {
-        // Ajouter le mot au tableau de mots
+        // Ajouter le mot au tableau result
         word_array_add(result, current->word);
       }
       current = current->next;
