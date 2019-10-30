@@ -212,7 +212,7 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
 
   // Parcourir l'ensemble du tableau
   for(size_t i = 0; i < self->size; ++i) {
-    // Vérifier si word est un anagramme du mot courant et l'ajouter à result si c'est le cas
+    // Vérifier si word est une anagramme du mot courant et l'ajouter à result si c'est le cas
     if(string_are_anagrams(self->data[i], word)) {
       word_array_add(result, self->data[i]);
     }
@@ -491,7 +491,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
   for(size_t i = 0; i < self->size; ++i) {
     struct word_dict_bucket *current = self->buckets[i];
     while(current != NULL) {
-      // Vérifier si le mot courant est un anagramme de word
+      // Vérifier si le mot courant est une anagramme de word
       if(string_are_anagrams(current->word, word)) {
         // Ajouter le mot au tableau result
         word_array_add(result, current->word);
@@ -552,7 +552,7 @@ void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char
   for(size_t i = 0; i < self->size; ++i) {
     struct word_dict_bucket *current = self->buckets[i];
     while(current != NULL) {
-      // Vérifier si le mot courant est un anagramme de word
+      // Vérifier si le mot courant est une anagramme de word
       if(string_are_anagrams(word, current->word)) {
         // Ajouter le mot au tableau result
         word_array_add(result, current->word);

@@ -186,7 +186,6 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
  */
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result);
 
-
 #ifdef __cplusplus
 }
 #endif
