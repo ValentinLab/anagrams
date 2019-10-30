@@ -8,6 +8,8 @@
 extern "C" {
 #endif
 
+#define MALLOC_ERROR "Problème lors de l'allocation de la mémoire.\n"
+
 /* 
  * ----------------------------------------
  * -> Partie 1 : Strings
@@ -135,6 +137,8 @@ size_t fnv_hash(const char *key);
  * Effectuer un rehash du dictionnaire
  */
 void word_dict_rehash(struct word_dict *self);
+
+#define COLLISION_FACTOR 0.5
 
 /*
  * Ajouter un nouvel élément au dictionnaire

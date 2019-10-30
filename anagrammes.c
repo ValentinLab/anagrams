@@ -28,36 +28,43 @@ bool string_are_anagrams(const char *str1, const char *str2) {
   int wildcards_number = 0;
   int *count_letters = calloc(ALPHABET_SIZE, sizeof(int));
   if(count_letters == NULL) {
-    printf("Problème lors de l'allocation de la mémoire.\n");
+    printf(MALLOC_ERROR);
     return false;
   }
   for(size_t i = 0; i < size_str; ++i) {
+    // Vérifier que le caractère courant de str1 n'est pas le joker '*'
     if(str1[i] != '*') {
-      // Incrémenter l'élément du tableau correspondant à la lettre courante de str1
+      // Incrémenter l'élément du tableau correspondant à la lettre courante
       count_letters[str1[i] - 'a'] += 1;
     } else {
-      // Décrémenter le nombre de joker si la lettre courante est '*'
+      // Décrémenter le nombre de joker
       --wildcards_number;
+
+      // Vérifier que str1 comporte au maximum 4 jokers
+      if(-wildcards_number > WILDCARDS_MAX) {
+        free(count_letters);
+        return false;
+      }
     }
-    // Décrémenter l'élément du tableau correspondant à la lettre courante de str1
+    // Décrémenter l'élément du tableau correspondant à la lettre courante de str2
     count_letters[str2[i] - 'a'] -= 1;
   }
 
   // Contrôler les occurences des deux strings dans le tableau count_letters
+  // count_letters[index] = 0 -> même nombre d'occurences, > 0 -> plus d'occurences dans str1, < 0 -> plsu d'occurences dans str2
   size_t index = 0;
   while(index < ALPHABET_SIZE) {
-    // Vérifier que str1 compte bien au maximum 4 jokers
-    if(-wildcards_number > WILDCARDS_MAX) {
-      free(count_letters);
-      return false;
-    }
-    // Vérifier que str1 en compte pas plus d'occurences que str1
-    // Vérifier que le nombre d'occurence de str2 n'est pas plus important que le nombre de jokers de str1
+    assert(wildcards_number >= -4);
+    assert(wildcards_number <= 0);
+
+    // Vérifier pour chaque lettre qu'il n'y a pas plus d'occurences dans str1 que str2
+    // Vérifier que les occurences supplémentaires de str2 sont couvertes par les jokers de str1
     if(count_letters[index] > 0 || count_letters[index] < wildcards_number) {
       free(count_letters);
       return false;
     }
-    // Vérifier si str2 compte plus d'occurences que str1 et vérifier s'il y a assez de jokers
+
+    // Vérifier si des lettres de str2 comptent plus d'occurences que str1
     if(count_letters[index] < 0) {
       // S'il n'y a plus ou pas de jokers
       if(wildcards_number == 0) {
@@ -81,11 +88,11 @@ char *string_duplicate(const char *str) {
   // Allouer la mémoire nécessaire à la nouvelle chaîne
   char *str_cpy = malloc(strlen(str) * sizeof(char) + 1);
   if(str_cpy == NULL) {
-    printf("Problème lors de l'allocation de la mémoire.\n");
+    printf(MALLOC_ERROR);
     return NULL;
   }
 
-  // Copier str dans la nouvelle chaîne
+  // Copier str dans la nouvelle chaîne str_cpy
   strcpy(str_cpy, str);
 
   return str_cpy;
@@ -124,7 +131,7 @@ void clean_newline(char *buf, size_t size) {
     ++i;
   }
 
-  // Remplacer le caractère par celui de fin de chaîne
+  // Remplacer le caractère '\n' par celui de fin de chaîne
   buf[i] = '\0';
 }
 
@@ -139,6 +146,10 @@ void word_array_create(struct word_array *self) {
 
   // Allouer un tableau de capacité 10 et taille 0
   self->data = calloc(10, sizeof(char *));
+  if(self->data == NULL) {
+    printf(MALLOC_ERROR);
+    return;
+  }
   self->size = 0;
   self->capacity = 10;
 }
@@ -169,6 +180,10 @@ static void word_array_grow(struct word_array *self) {
 
   // Allouer la mémoire du nouveau tableau et le remplir
   char **data = calloc(self->capacity, sizeof(char *));
+  if(data == NULL) {
+    printf(MALLOC_ERROR);
+    return;
+  }
   memcpy(data, self->data, self->size * sizeof(char *));
   
   // Remplacer l'ancien tableau
@@ -180,12 +195,12 @@ void word_array_add(struct word_array *self, const char *word) {
   assert(self != NULL);
   assert(word != NULL);
 
-  // Vérifier la capacité du tableau
+  // Vérifier si le tableau est rempli
   if(self->capacity == self->size) {
     word_array_grow(self);
   }
 
-  // Ajouter le nouveau mot au tableau
+  // Ajouter le nouveau mot à la fin du tableau
   self->data[self->size] = string_duplicate(word);
   self->size += 1;
 }
@@ -195,22 +210,22 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
   assert(word != NULL);
   assert(result != NULL);
 
-  // Comparer word avec tous les éléments du tableau
+  // Parcourir l'ensemble du tableau
   for(size_t i = 0; i < self->size; ++i) {
+    // Vérifier si word est un anagramme du mot courant et l'ajouter à result si c'est le cas
     if(string_are_anagrams(self->data[i], word)) {
-      // Ajouter l'anagramme au tableau resultat
       word_array_add(result, self->data[i]);
     }
   }
 }
 
 /*
- * Échanger deux valeurs aux indidces i et j dans un tableau
+ * Échanger deux valeurs aux indidces i et j dans un tableau de mots
  */
 static void word_array_swap(struct word_array *self, size_t i, size_t j) {
   assert(self != NULL);
-  assert(i < self->size);
-  assert(j < self->size);
+  assert(i >= 0 && i < self->size);
+  assert(j >= 0 && j < self->size);
 
   char *tmp = self->data[i];
   self->data[i] = self->data[j];
@@ -225,21 +240,21 @@ static size_t word_array_quick_sort_partition(struct word_array *self, size_t lo
   assert(low < self->size);
   assert(high < self->size);
 
-  // Trouver le pivot
+  // Trouver le pivot (élément médian du tableau)
   size_t pivot_index = (low + high)/2;
   const char *pivot_value = self->data[pivot_index];
 
-  // Placer les éléments correctement selont le pivot
+  // Placer les éléments correctement en fonction du pivot
   word_array_swap(self, pivot_index, high);
   size_t current = low;
   for(size_t i = low; i < high; ++i) {
-    if(strcmp(pivot_value, self->data[i]) > 0) {
+    if(strcmp(self->data[i], pivot_value) < 0) {
       word_array_swap(self, i, current);
       ++current;
     }
   }
 
-  // Placer le pivot au bon endroit
+  // Placer le pivot au bon indice
   word_array_swap(self, high, current);
 
   return current;
@@ -256,16 +271,24 @@ static void word_array_quick_sort(struct word_array *self, ptrdiff_t low, ptrdif
   if(low < high) {
     // Trouver le pivot
     size_t pivot = word_array_quick_sort_partition(self, low, high);
-    // Trier récursivement avant et après le pivot
+    // Trier récursivement le sous-tableau avant et après le pivot
     word_array_quick_sort(self, low, pivot - 1);
     word_array_quick_sort(self, pivot + 1, high);
   }
 }
 
+/*
+ * Vérifier si un tableau de mot est trié ou non
+ */
 static bool word_array_is_sorted(const struct word_array *self) {
   assert(self != NULL);
 
-  // Parcourir le tableau de mots
+  // Vérifier si le tableau est vide
+  if(self->size == 0) {
+    return true;
+  }
+
+  // Parcourir l'ensemble du tableau
   size_t index = 0;
   while(index < self->size - 1) {
     if(strcmp(self->data[index], self->data[index + 1]) > 0) {
@@ -280,8 +303,8 @@ static bool word_array_is_sorted(const struct word_array *self) {
 void word_array_sort(struct word_array *self) {
   assert(self != NULL);
 
-  // Trier avec QuickSort
-  if(self->size > 0 && !word_array_is_sorted(self)) {
+  // Trier le tableau avec un tri QuickSort s'il ne l'est pas déjà
+  if(!word_array_is_sorted(self)) {
     word_array_quick_sort(self, 0, self->size - 1);
   }
 }
@@ -296,7 +319,7 @@ void word_array_print(const struct word_array *self) {
 }
 
 void word_array_read_file(struct word_array *self, const char *filename) {
-  // Buffer du mot à lire
+  // Buffer
   char word[WORD_LETTERS_MAX];
 
   // Ouvrir le fichier à lire
@@ -306,7 +329,7 @@ void word_array_read_file(struct word_array *self, const char *filename) {
     return;
   }
 
-  // Parcourir l'ensemble du fichier
+  // Parcourir l'ensemble du fichier et ajouter les mots à self
   while(!feof(fp)) {
     fgets(word, WORD_LETTERS_MAX, fp);
     clean_newline(word, WORD_LETTERS_MAX);
@@ -332,19 +355,17 @@ void word_dict_bucket_destroy(struct word_dict_bucket *bucket) {
 }
 
 struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, const char *word) {
-  // Allocation de la mémoire du nouveau noeud
+  assert(word != NULL);
+
+  // Nouveau noeud
   struct word_dict_bucket *new_node = malloc(sizeof(struct word_dict_bucket));
+  if(new_node == NULL) {
+    printf(MALLOC_ERROR);
+    return NULL;
+  }
   new_node->word = word;
 
-  // Vérifier si la liste est vide
-  if(bucket == NULL) {
-    new_node->next = NULL;
-    bucket = new_node;
-
-    return bucket;
-  }
-
-  // Ajout du noeud
+  // Ajouter le nouveau noeud au début de la liste
   new_node->next = bucket;
   bucket = new_node;
 
@@ -352,8 +373,15 @@ struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, c
 }
 
 void word_dict_create(struct word_dict *self) {
+  assert(self != NULL);
+
+  // Créer un dictionnaire de taille 10 avec 0 élément
   self->size = 10;
   self->buckets = calloc(self->size, sizeof(struct word_dict_bucket*));
+  if(self->buckets == NULL) {
+    printf(MALLOC_ERROR);
+    return;
+  }
   for(size_t i = 0; i < self->size; ++i) {
     self->buckets[i] = NULL;
   }
@@ -363,10 +391,13 @@ void word_dict_create(struct word_dict *self) {
 void word_dict_destroy(struct word_dict *self) {
   assert(self != NULL);
 
+  // Détruire chaque liste chaînée du tableau buckets
   for(size_t i = 0; i < self->size; ++i) {
     word_dict_bucket_destroy(self->buckets[i]);
   }
+  // Détruire le dictionnaire
   free(self->buckets);
+  self->buckets = NULL;
   self->size = 0;
   self->count = 0;
 }
@@ -374,7 +405,7 @@ void word_dict_destroy(struct word_dict *self) {
 size_t fnv_hash(const char *key) {
   assert(key != NULL);
 
-  // Dupliquer et trier la clé
+  // Dupliquer et trier key
   char *dup_key = string_duplicate(key);
   string_sort_letters(dup_key);
 
@@ -394,9 +425,13 @@ size_t fnv_hash(const char *key) {
 void word_dict_rehash(struct word_dict *self) {
   assert(self != NULL);
 
-  // Doubler la taille du tableau
+  // Doubler la taille du tableau buckets
   size_t size = self->size * 2;
   struct word_dict_bucket **buckets = calloc(size, sizeof(struct word_dict_bucket));
+  if(buckets == NULL) {
+    printf(MALLOC_ERROR);
+    return;
+  }
   for(size_t i = 0; i < size; ++i) {
     buckets[i] = NULL;
   }
@@ -407,7 +442,7 @@ void word_dict_rehash(struct word_dict *self) {
     while(current != NULL) {
       // Obtenir le nouvel indice
       size_t new_index = fnv_hash(current->word) % size;
-      // Déplacer le noued dans la nouvel liste
+      // Déplacer le noeud dans la nouvelle liste
       struct word_dict_bucket *tmp = current;
       current = current->next;
       tmp->next = buckets[new_index];
@@ -415,7 +450,7 @@ void word_dict_rehash(struct word_dict *self) {
     }
   }
 
-  // Insérer les nouvelles valeurs dans la structure
+  // Insérer les nouvelles valeurs dans le dictionnaire
   self->size = size;
   free(self->buckets);
   self->buckets = buckets;
@@ -426,7 +461,7 @@ void word_dict_add(struct word_dict *self, const char *word) {
   assert(word != NULL);
 
   // Effectuer un rehash si nécessaire
-  if(self->count / self->size >= 0.5) {
+  if(self->count / self->size >= COLLISION_FACTOR) {
     word_dict_rehash(self);
   }
 
@@ -455,7 +490,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
     while(current != NULL) {
       // Vérifier si le mot courant est un anagramme de word
       if(string_are_anagrams(current->word, word)) {
-        // Ajouter le mot au tableau de mots
+        // Ajouter le mot au tableau result
         word_array_add(result, current->word);
       }
       current = current->next;
@@ -482,6 +517,7 @@ void wildcard_search(struct wildcard *self, const char *word) {
   // Pacourir word
   size_t index = 0;
   while(word[index] != '\0' && self->count < 4) {
+    // Vérifier si le caractère courant correspond au joker '*'
     if(word[index] == '*') {
       self->index[self->count] = index;
       self->count += 1;
@@ -495,7 +531,7 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
   assert(word != NULL);
   assert(result != NULL);
 
-  // Comparer word avec tous les éléments du tableau et vérifier si ce sont des anagrammes
+  // Comparer word avec tous les éléments du tableau de mots et vérifier si ce sont des anagrammes
   for(size_t i = 0; i < self->size; ++i) {
     if(string_are_anagrams(word, self->data[i])) {
       // Ajouter l'anagramme au tableau result
