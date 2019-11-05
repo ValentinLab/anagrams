@@ -335,8 +335,10 @@ void word_array_read_file(struct word_array *self, const char *filename) {
   // Parcourir l'ensemble du fichier et ajouter les mots à self
   while(!feof(fp)) {
     fgets(word, WORD_LETTERS_MAX, fp);
-    clean_newline(word, WORD_LETTERS_MAX);
-    word_array_add(self, word);
+    if(!feof(fp)) {
+      clean_newline(word, WORD_LETTERS_MAX);
+      word_array_add(self, word);
+    }
   }
 
   fclose(fp);
