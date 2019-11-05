@@ -213,7 +213,7 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
   // Parcourir l'ensemble du tableau
   for(size_t i = 0; i < self->size; ++i) {
     // Vérifier si word est une anagramme du mot courant et l'ajouter à result si c'est le cas
-    if(string_are_anagrams(self->data[i], word)) {
+    if(string_are_anagrams(word, self->data[i])) {
       word_array_add(result, self->data[i]);
     }
   }
@@ -380,8 +380,8 @@ struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, c
 void word_dict_create(struct word_dict *self) {
   assert(self != NULL);
 
-  // Créer un dictionnaire de taille 10 avec 0 élément
-  self->size = 10;
+  // Créer un dictionnaire de taille 100 avec 0 élément
+  self->size = 100;
   self->buckets = calloc(self->size, sizeof(struct word_dict_bucket*));
   if(self->buckets == NULL) {
     printf(MALLOC_ERROR);
@@ -415,10 +415,10 @@ size_t fnv_hash(const char *key) {
   string_sort_letters(dup_key);
 
   // FNV-1a hash
-  const size_t key_size = strlen(dup_key);
   size_t hash = FNV_OFFSET_BASIS;
-  for(size_t i = 0; i < key_size; ++i) {
-    hash = hash ^ dup_key[i];
+  size_t i = 0;
+  while(dup_key[i] != '\0') {
+    hash = hash ^ dup_key[i++];
     hash = hash * FNV_PRIME;
   }
 
@@ -489,17 +489,18 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
   assert(word != NULL);
   assert(result != NULL);
 
-  // Parcourir le dictionnaire
-  for(size_t i = 0; i < self->size; ++i) {
-    struct word_dict_bucket *current = self->buckets[i];
-    while(current != NULL) {
-      // Vérifier si le mot courant est une anagramme de word
-      if(string_are_anagrams(current->word, word)) {
-        // Ajouter le mot au tableau result
-        word_array_add(result, current->word);
-      }
-      current = current->next;
+  // Se placer dans la bonne liste chaînée
+  size_t index = fnv_hash(word) % self->size;
+
+  // Parcourir la liste chaînée
+  struct word_dict_bucket *current = self->buckets[index];
+  while(current != NULL) {
+    // Vérifier si le mot courant est une anagramme de word
+    if(string_are_anagrams(word, current->word)) {
+      // Ajouter le mot au tableau result
+      word_array_add(result, current->word);
     }
+    current = current->next;
   }
 }
 
@@ -532,34 +533,9 @@ void wildcard_search(struct wildcard *self, const char *word) {
 }
 
 void word_array_search_anagrams_wildcard(const struct word_array *self, const char *word, struct word_array *result) {
-  assert(self != NULL);
-  assert(word != NULL);
-  assert(result != NULL);
-
-  // Comparer word avec tous les éléments du tableau de mots et vérifier si ce sont des anagrammes
-  for(size_t i = 0; i < self->size; ++i) {
-    if(string_are_anagrams(word, self->data[i])) {
-      // Ajouter l'anagramme au tableau result
-      word_array_add(result, self->data[i]);
-    }
-  }
+  word_array_search_anagrams(self, word, result);
 }
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
-  assert(self != NULL);
-  assert(word != NULL);
-  assert(result != NULL);
-
-  // Parcourir le dictionnaire
-  for(size_t i = 0; i < self->size; ++i) {
-    struct word_dict_bucket *current = self->buckets[i];
-    while(current != NULL) {
-      // Vérifier si le mot courant est une anagramme de word
-      if(string_are_anagrams(word, current->word)) {
-        // Ajouter le mot au tableau result
-        word_array_add(result, current->word);
-      }
-      current = current->next;
-    }
-  }
+  word_dict_search_anagrams(self, word, result);
 }

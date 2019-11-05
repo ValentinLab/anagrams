@@ -125,8 +125,8 @@ void word_dict_create(struct word_dict *self);
  */
 void word_dict_destroy(struct word_dict *self);
 
-#define FNV_OFFSET_BASIS 0xcbf29ce484222325
-#define FNV_PRIME 0x00000100000001b3
+#define FNV_OFFSET_BASIS 0xcbf29ce484222325UL
+#define FNV_PRIME 0x00000100000001b3UL
 
 /*
  * Calculer un hash FNV-1a 64 bits
