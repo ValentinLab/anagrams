@@ -506,7 +506,7 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
 
 /* 
  * ----------------------------------------
- * -> Partie 4 : Wildcards
+ * -> Partie 4 : Wildcards   /**Manger des carottes YOUPI
  * ----------------------------------------
  */
 
@@ -538,4 +538,5 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
   word_dict_search_anagrams(self, word, result);
+
 }
