@@ -518,25 +518,6 @@ void word_dict_search_anagrams(const struct word_dict *self, const char *word, s
   }
 }
 
-static void word_dict_search_anagrams_with_four(const struct word_dict *self, const char *word, struct word_array *result) {
-  assert(self != NULL);
-  assert(word != NULL);
-  assert(result != NULL);
-
-  // Parcourir le dictionnaire
-  for(size_t i = 0; i < self->size; ++i) {
-    struct word_dict_bucket *current = self->buckets[i];
-    while(current != NULL) {
-      // Vérifier si le mot courant est une anagramme de word
-      if(string_are_anagrams(word, current->word)) {
-        // Ajouter le mot au tableau result
-        word_array_add(result, current->word);
-      }
-      current = current->next;
-    }
-  }
-}
-
 /* 
  * ----------------------------------------
  * -> Partie 4 : Wildcards
@@ -571,6 +552,10 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
 }
 
 void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
+  assert(self != NULL);
+  assert(word != NULL);
+  assert(result != NULL);
+
   // Rechercher des jokers dans word
   size_t index = 0;
   size_t wildcards_number = 0;
@@ -584,12 +569,23 @@ void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char
     return;
   }
   
-  // Utiliser la méthode approprié au nombre de jokers
-  if(wildcards_number == 0) {
+  // Utiliser la méthode appropriée au nombre de jokers
+  if(wildcards_number == 0) { // rechercher sans jokers
     word_dict_search_anagrams(self, word, result);
-  } else if(wildcards_number <=WILDCARDS_MAX) {
-    word_dict_search_anagrams_with_four(self, word, result);
-  } else {
-    printf("Warning : you can't use more than %d wildcards.\n", WILDCARDS_MAX);
+  } else { // rechercher avec jokers
+    assert(wildcards_number <=WILDCARDS_MAX);
+
+    // Parcourir le dictionnaire
+    for(size_t i = 0; i < self->size; ++i) {
+      struct word_dict_bucket *current = self->buckets[i];
+      while(current != NULL) {
+        // Vérifier si le mot courant est une anagramme de word
+        if(string_are_anagrams(word, current->word)) {
+          // Ajouter le mot au tableau result
+          word_array_add(result, current->word);
+        }
+        current = current->next;
+      }
+    }
   }
 }
