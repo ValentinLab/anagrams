@@ -151,7 +151,7 @@ void word_dict_add(struct word_dict *self, const char *word);
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array);
 
 /*
- * Rechercher les anagrammes d'un mot parmi ceux d'un dictionnaire
+ * Rechercher les anagrammes d'un mot parmi ceux d'un dictionnaire sans jokers
  */
 void word_dict_search_anagrams(const struct word_dict *self, const char *word, struct word_array *result);
 

@@ -12,7 +12,7 @@
 /*
  * Afficher le nombre d'anagrammes et le temps d'exécution
  */
-static void print_results_data(struct word_array *result, struct timeval *before, struct timeval *after) {
+static void print_results_data(const struct word_array *result, const struct timeval *before, const struct timeval *after) {
   // Calculer le temps d'exécution
   int exec_time = (after->tv_sec * SEC_TO_US + after->tv_usec) - (before->tv_sec * SEC_TO_US + before->tv_usec);
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   word_dict_fill_with_array(&dict, &dict_array);
 
   // Afficher le message d'accueil
-  printf("FIND ANAGRAMS\nInfo: exit the application by entering an empty word.\n\n");
+  printf("FIND ANAGRAMS\nInfo: enter an empty word to exit the application.\n\n");
 
   // Faire saisir des lettres à l'utilisateur et rechercher les anagrammes
   char buf[BUFSIZE];

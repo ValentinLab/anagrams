@@ -39,13 +39,6 @@ bool string_are_anagrams(const char *str1, const char *str2) {
     } else {
       // Décrémenter le nombre de joker
       wildcards_number -= 1;
-
-      // Vérifier que str1 comporte au maximum 4 jokers
-      if(-wildcards_number > WILDCARDS_MAX) {
-        printf("Warning : you can't use more than %d wildcards.\n", WILDCARDS_MAX);
-        free(count_letters);
-        return false;
-      }
     }
     // Décrémenter l'élément du tableau correspondant à la lettre courante de str2
     count_letters[str2[i] - 'a'] -= 1;
@@ -220,7 +213,7 @@ void word_array_search_anagrams(const struct word_array *self, const char *word,
     }
   }
   if(wildcards_number > WILDCARDS_MAX) {
-    printf("Warning : you can't use more than %d wildcards.\n", WILDCARDS_MAX);
+    printf("Warning - you can't use more than %d wildcards.\n", WILDCARDS_MAX);
     return;
   }
 
@@ -539,12 +532,13 @@ void wildcard_search(struct wildcard *self, const char *word) {
   size_t index = 0;
   while(word[index] != '\0') {
     // Vérifier si le caractère courant correspond au joker '*'
-    if(word[index++] == '*') {
-      self->count += 1;
+    if(word[index] == '*') {
       if(self->count < WILDCARDS_MAX) {
         self->index[self->count] = index;
       }
+      self->count += 1;
     }
+    ++index;
   }
 }
 
@@ -552,41 +546,67 @@ void word_array_search_anagrams_wildcard(const struct word_array *self, const ch
   word_array_search_anagrams(self, word, result);
 }
 
-void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
+/*
+ * Rechercher des anagrammes dans le dictionnaire lorsqu'il y a un ou plusieurs jokers
+ */
+static void word_dict_search_anagrams_with_wildcards(const struct word_dict *self, const char *word, struct word_array *result, struct wildcard *word_w) {
   assert(self != NULL);
   assert(word != NULL);
   assert(result != NULL);
+  assert(word_w->count > 0 && word_w->count <= WILDCARDS_MAX);
 
-  // Rechercher des jokers dans word
-  size_t index = 0;
-  size_t wildcards_number = 0;
-  while(word[index] != '\0') {
-    if(word[index++] == '*') {
-      ++wildcards_number;
+  // Dupliquer word pour effectuer le changement des jokers
+  char *dup_word = string_duplicate(word);
+
+  // Remplacer les jokers
+  for(size_t i = 0; i < ALPHABET_SIZE; ++i) {
+    // Premier joker
+    dup_word[word_w->index[0]] = 'a' + i;
+
+    if(word_w->count > 1) {
+      for(size_t j = i; j < ALPHABET_SIZE; ++j) {
+        // Deuxième joker
+        dup_word[word_w->index[1]] = 'a' + j;
+
+        if(word_w->count > 2) {
+          for(size_t k = j; k < ALPHABET_SIZE; ++k) {
+            // Troisième joker
+            dup_word[word_w->index[2]] = 'a' + k;
+
+            if(word_w->count > 3) {
+              for(size_t l = k; l < ALPHABET_SIZE; ++l) {
+                // Quatrième joker
+                dup_word[word_w->index[3]] = 'a' + l;
+                word_dict_search_anagrams(self, dup_word, result);
+              }
+            } else {
+              word_dict_search_anagrams(self, dup_word, result);
+            }
+          }
+        } else {
+          word_dict_search_anagrams(self, dup_word, result);
+        }
+      }
+    } else {
+      word_dict_search_anagrams(self, dup_word, result);
     }
   }
-  if(wildcards_number > WILDCARDS_MAX) {
-    printf("Warning : you can't use more than %d wildcards.\n", WILDCARDS_MAX);
-    return;
-  }
+
+  free(dup_word);
+}
+
+void word_dict_search_anagrams_wildcard(const struct word_dict *self, const char *word, struct word_array *result) {
+  // Rechercher des jokers dans word
+  struct wildcard word_w;
+  wildcard_create(&word_w);
+  wildcard_search(&word_w, word);
   
   // Utiliser la méthode appropriée au nombre de jokers
-  if(wildcards_number == 0) { // rechercher sans jokers
+  if(word_w.count == 0) { // il n'y a aucun joker
     word_dict_search_anagrams(self, word, result);
-  } else { // rechercher avec jokers
-    assert(wildcards_number <=WILDCARDS_MAX);
-
-    // Parcourir le dictionnaire
-    for(size_t i = 0; i < self->size; ++i) {
-      struct word_dict_bucket *current = self->buckets[i];
-      while(current != NULL) {
-        // Vérifier si le mot courant est une anagramme de word
-        if(string_are_anagrams(word, current->word)) {
-          // Ajouter le mot au tableau result
-          word_array_add(result, current->word);
-        }
-        current = current->next;
-      }
-    }
+  } else if(word_w.count <= WILDCARDS_MAX) { // il y a entre un et quatre jokers
+    word_dict_search_anagrams_with_wildcards(self, word, result, &word_w);
+  } else { // il y a trop de jokers
+    printf("Warning - you can't use more than %d wildcards.\n", WILDCARDS_MAX);
   }
 }
