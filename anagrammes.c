@@ -394,8 +394,8 @@ struct word_dict_bucket *word_dict_bucket_add(struct word_dict_bucket *bucket, c
 void word_dict_create(struct word_dict *self) {
   assert(self != NULL);
 
-  // Créer un dictionnaire de taille 100 avec 0 élément
-  self->size = 100;
+  // Créer un dictionnaire de taille 50 avec 0 élément
+  self->size = 50;
   self->buckets = calloc(self->size, sizeof(struct word_dict_bucket*));
   if(self->buckets == NULL) {
     printf(MALLOC_ERROR);
@@ -487,6 +487,7 @@ void word_dict_add(struct word_dict *self, const char *word) {
   // Ajouter un nouvel élément au dictionnaire
   size_t index = fnv_hash(word) % self->size;
   self->buckets[index] = word_dict_bucket_add(self->buckets[index], word);
+  self->count += 1;
 }
 
 void word_dict_fill_with_array(struct word_dict *self, const struct word_array *array) {
