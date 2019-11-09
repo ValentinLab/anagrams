@@ -1,0 +1,23 @@
+# .gitignore
+# Valentin Perignon (2019)
+
+# ---------- General ----------
+
+# Executables
+*.exe
+*.out
+
+# ---------- C ----------
+
+# Object files
+*.o
+
+# Libraries
+*.a
+
+# ---------- Java ----------
+# Compiled class file
+*.class
+
+# ---------- VisualStudioCode ----------
+.vscode/*
