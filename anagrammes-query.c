@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 
     /* 
      * ----------------------------------------
-     * -> Rechercher via word_dict
+     * -> Rechercher via word_array
      * ----------------------------------------
      */
 
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
 
     /* 
      * ----------------------------------------
-     * -> Rechercher via word_array
+     * -> Rechercher via word_dict
      * ----------------------------------------
      */
 
